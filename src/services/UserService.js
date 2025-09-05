@@ -1,25 +1,48 @@
 import axiosInstance from './AxiosInstance';
 
-export function getUsers() {
-    return axiosInstance.get('/users');
-}
+// User Management Service
+export const UserService = {
+    // Get all users (Admin only)
+    getAllUsers: () => {
+        return axiosInstance.get('/users');
+    },
 
-export function getUserById(userId) {
-    return axiosInstance.get(`/users/${userId}`);
-}
+    // Get dashboard statistics
+    getDashboardStats: () => {
+        return axiosInstance.get('/users/dashboard-stats');
+    },
 
-export function createUser(userData) {
-    return axiosInstance.post('/users', userData);
-}
+    // Get team leads
+    getTeamLeads: () => {
+        return axiosInstance.get('/users/team-leads');
+    },
 
-export function updateUser(userId, userData) {
-    return axiosInstance.put(`/users/${userId}`, userData);
-}
+    // Get internees
+    getInternees: (teamLeadId = null) => {
+        const url = teamLeadId ? `/users/internees/${teamLeadId}` : '/users/internees';
+        return axiosInstance.get(url);
+    },
 
-export function deleteUser(userId) {
-    return axiosInstance.delete(`/users/${userId}`);
-}
+    // Update user status (Admin only)
+    updateUserStatus: (userId, isActive) => {
+        return axiosInstance.put(`/users/${userId}/status`, { isActive });
+    },
 
-export function approveUser(userId) {
-    return axiosInstance.patch(`/users/${userId}/approve`);
-} 
+    // Update user role (Admin only)
+    updateUserRole: (userId, role, teamLeadId = null) => {
+        const data = { role };
+        if (teamLeadId) data.teamLeadId = teamLeadId;
+        return axiosInstance.put(`/users/${userId}/role`, data);
+    },
+
+    // Create new user (Admin only)
+    createUser: (userData) => {
+        return axiosInstance.post('/auth/register', userData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+    }
+};
+
+export default UserService;

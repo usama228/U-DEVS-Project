@@ -4,9 +4,10 @@ import React, { useReducer, useContext, useEffect, useState } from "react";
 /// Scroll
 import {Collapse} from 'react-bootstrap';
 import { Link } from "react-router-dom";
-import {MenuList} from './Menu';
+import {MenuList, filterMenuByRole} from './Menu';
 import {useScrollPosition} from "@n8tb1t/use-scroll-position";
 import { ThemeContext } from "../../../context/ThemeContext";
+import { getUserDetails } from "../../../services/AuthService";
 
 
 const reducer = (previousState, updatedState) => ({
@@ -29,7 +30,31 @@ const SideBar = () => {
    ChangeIconSidebar,
  } = useContext(ThemeContext);
 
- const [state, setState] = useReducer(reducer, initialState);	
+ const [state, setState] = useReducer(reducer, initialState);
+ const [userRole, setUserRole] = useState(null);
+ const [filteredMenu, setFilteredMenu] = useState([]);
+
+ // Get user role and filter menu
+ useEffect(() => {
+   const fetchUserRole = async () => {
+     try {
+       const userDetails = await getUserDetails();
+       if (userDetails && userDetails.role) {
+         setUserRole(userDetails.role);
+         const filtered = filterMenuByRole(MenuList, userDetails.role);
+         setFilteredMenu(filtered);
+       }
+     } catch (error) {
+       console.error('Error fetching user details:', error);
+       // Default to internee role if error
+       setUserRole('internee');
+       const filtered = filterMenuByRole(MenuList, 'internee');
+       setFilteredMenu(filtered);
+     }
+   };
+
+   fetchUserRole();
+ }, []);
 
  useEffect(() => {
    var btn = document.querySelector(".nav-control");
@@ -75,7 +100,8 @@ const SideBar = () => {
 
      
   useEffect(() => {
-    MenuList.forEach((data) => {
+    const menuToProcess = filteredMenu.length > 0 ? filteredMenu : MenuList;
+    menuToProcess.forEach((data) => {
       data.content?.forEach((item) => {        
         if(path === item.to){         
           setState({active : data.title})          
@@ -87,7 +113,7 @@ const SideBar = () => {
         })
       })
   })
-  },[path]);
+  },[path, filteredMenu]);
  
   return (
       <div
@@ -105,7 +131,7 @@ const SideBar = () => {
       >
          <div className="dlabnav-scroll">           
             <ul className="metismenu" id="menu">
-              {MenuList.map((data, index)=>{
+              {(filteredMenu.length > 0 ? filteredMenu : MenuList).map((data, index)=>{
                 let menuClass = data.classsChange;
                   if(menuClass === "menu-title"){
                     return(

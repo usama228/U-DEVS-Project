@@ -1,0 +1,210 @@
+/* Minimal layout fixes for zoom/positioning issues only */
+
+/* Fix zoom/scale issues that cause weird zoomed-in appearance */
+html, body, #root {
+    zoom: 1 !important;
+    transform: none !important;
+    scale: 1 !important;
+}
+
+/* Prevent content shift to top-left while preserving original layout */
+.content-body {
+    transform: none !important;
+    zoom: 1 !important;
+    scale: 1 !important;
+}
+
+/* Fix main wrapper if it has zoom issues */
+#main-wrapper {
+    transform: none !important;
+    zoom: 1 !important;
+    scale: 1 !important;
+}
+
+/* Fix any container zoom issues */
+.container-fluid {
+    transform: none !important;
+    zoom: 1 !important;
+    scale: 1 !important;
+}
+
+/* Remove background image from welcome card */
+.welcome-card {
+    background-image: none !important;
+    background-size: auto !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    position: relative !important;
+}
+
+/* Ensure welcome card has proper styling */
+.welcome-card::before,
+.welcome-card::after {
+    display: none !important;
+    content: none !important;
+}
+
+/* Remove any pseudo-elements that might contain background images */
+.welcome-card *::before,
+.welcome-card *::after {
+    display: none !important;
+    content: none !important;
+}
+
+/* Unified footer styling for consistency across all layouts */
+.footer {
+    min-height: 50px !important;
+    max-height: 50px !important;
+    display: block !important;
+    visibility: visible !important;
+    padding: 8px 0 !important;
+    margin-top: 1rem !important;
+    position: relative !important;
+    width: 100% !important;
+    left: 0 !important;
+    right: 0 !important;
+}
+
+/* Override all footer variant styles for consistency */
+.footer.footer-outer,
+.footer.out-footer,
+.footer.style-1,
+.footer.style-2 {
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+/* Responsive footer adjustments */
+@media only screen and (max-width: 1400px) {
+    .footer.footer-outer,
+    .footer.out-footer,
+    .footer.style-1,
+    .footer.style-2 {
+        width: 100% !important;
+    }
+}
+
+@media only screen and (max-width: 991px) {
+    .footer.footer-outer,
+    .footer.out-footer,
+    .footer.style-1,
+    .footer.style-2 {
+        width: 100% !important;
+        margin-right: 0 !important;
+        margin-left: 0 !important;
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    .footer.footer-outer,
+    .footer.out-footer,
+    .footer.style-1,
+    .footer.style-2 {
+        width: 100% !important;
+        margin: 0 !important;
+        padding-left: 0 !important;
+    }
+}
+
+.footer .copyright {
+    display: block !important;
+    visibility: visible !important;
+    padding: 8px 15px !important;
+    margin: 0 !important;
+    text-align: center !important;
+}
+
+.footer .copyright p {
+    display: block !important;
+    visibility: visible !important;
+    margin: 0 !important;
+    font-size: 13px !important;
+    line-height: 1.3 !important;
+    color: #495057 !important; /* Dark gray for better visibility in both themes */
+}
+
+/* Dark theme footer text */
+[data-theme-version="dark"] .footer .copyright p {
+    color: #adb5bd !important; /* Light gray for dark theme */
+}
+
+/* Footer link styling */
+.footer .copyright a {
+    color: var(--primary) !important;
+    text-decoration: none !important;
+}
+
+.footer .copyright a:hover {
+    text-decoration: underline !important;
+}
+
+/* Fix text visibility issues in light theme */
+.text-muted {
+    color: #6c757d !important; /* Make text-muted darker in light theme */
+}
+
+/* Dark theme text-muted */
+[data-theme-version="dark"] .text-muted {
+    color: #adb5bd !important; /* Keep lighter for dark theme */
+}
+
+/* Fix faded text that appears before > symbols - make it darker in light theme only */
+[data-theme-version="light"] .breadcrumb-item,
+[data-theme-version="light"] .breadcrumb-item a,
+[data-theme-version="light"] .page-titles h4,
+[data-theme-version="light"] .page-titles .breadcrumb-item {
+    color: #495057 !important; /* Darker color for better readability in light theme only */
+}
+
+/* Light theme breadcrumb link hover effects */
+[data-theme-version="light"] .breadcrumb-item a:hover {
+    text-decoration: underline !important;
+}
+
+/* Fix any general faded text in light theme */
+[data-theme-version="light"] .text-secondary,
+[data-theme-version="light"] .text-light {
+    color: #6c757d !important;
+}
+
+/* Ensure table text is properly visible in light theme */
+[data-theme-version="light"] .table td,
+[data-theme-version="light"] .table th {
+    color: #212529 !important;
+}
+
+/* Fix team lead field and other table data visibility */
+[data-theme-version="light"] .table .text-muted {
+    color: #6c757d !important;
+}
+
+/* Page titles and navigation improvements for light theme */
+[data-theme-version="light"] .page-titles {
+    color: #495057 !important;
+}
+
+[data-theme-version="light"] .page-titles .breadcrumb {
+    background-color: transparent !important;
+}
+
+/* Ensure all text in cards is visible in light theme */
+[data-theme-version="light"] .card-body {
+    color: #212529 !important;
+}
+
+/* Fix date/time text in welcome card - make it white in light theme */
+[data-theme-version="light"] .welcome-card .text-light,
+[data-theme-version="light"] .welcome-card p {
+    color: #ffffff !important;
+}
+
+/* Fix viewport scaling issues on mobile */
+@media (max-width: 768px) {
+    body {
+        -webkit-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
+    }
+}

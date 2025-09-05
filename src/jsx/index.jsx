@@ -17,6 +17,13 @@ import WalletBar from './layouts/WalletBar';
 import Home from "./components/Dashboard/Home";
 import Finance from "./components/Dashboard/Finance";
 import DashboardDark from "./components/Dashboard/DashboardDark";
+import Dashboard from "./pages/Dashboard";
+
+/// User Management
+import Users from "./pages/Users";
+import ProtectedRoute from "../components/ProtectedRoute";
+import Profile from "./pages/Profile";
+import CreateUser from "./pages/CreateUser";
 
 //student
 import Students from "./components/Student/Students";
@@ -127,6 +134,10 @@ const Markup = () => {
     { url: "user", component: <User /> },
     { url: "activity", component: <Activity /> },
     { url: "calendar", component: <HomeCalendar /> },
+    // User Management
+    { url: "users", component: <Users /> },
+    { url: "profile", component: <Profile /> },
+    { url: "create-user", component: <CreateUser /> },
     //App Profile
     { url: "app-profile", component: <AppProfile /> },
     { url: "post-details", component: <PostDetails /> },
@@ -197,14 +208,50 @@ const Markup = () => {
         <Route path='/page-error-503' element={<Error503 />} />
         <Route path='/page-lock-screen' element={<LockScreen />} />
         <Route element={<Layout1 />}>
-          <Route path='/' exact element={<Home />} />
-          <Route path='/dashboard' exact element={<Home />} />
+          <Route path='/' exact element={<Dashboard />} />
+          <Route path='/dashboard' exact element={<Dashboard />} />
           <Route path='/dashboard-dark' exact element={<DashboardDark />} />         
         </Route>
         <Route element={<Layout2 />}>
-          {routhPath.map((data, i) => (
-            <Route key={i} exact path={`/${data.url}`} element={data.component} />
-          ))}
+          {routhPath.map((data, i) => {
+            // Apply route protection based on URL and role requirements
+            const protectedRoutes = ['users', 'create-user', 'teacher', 'add-teacher', 'teacher-detail'];
+            const teamLeadRoutes = ['student', 'student-detail', 'add-student', 'food', 'food-details'];
+            
+            if (protectedRoutes.includes(data.url)) {
+              return (
+                <Route 
+                  key={i} 
+                  exact 
+                  path={`/${data.url}`} 
+                  element={
+                    <ProtectedRoute requiredRoute={`/${data.url}`}>
+                      {data.component}
+                    </ProtectedRoute>
+                  } 
+                />
+              );
+            }
+            
+            if (teamLeadRoutes.includes(data.url)) {
+              return (
+                <Route 
+                  key={i} 
+                  exact 
+                  path={`/${data.url}`} 
+                  element={
+                    <ProtectedRoute requiredRoute={`/${data.url}`}>
+                      {data.component}
+                    </ProtectedRoute>
+                  } 
+                />
+              );
+            }
+            
+            return (
+              <Route key={i} exact path={`/${data.url}`} element={data.component} />
+            );
+          })}
         </Route>
 
         <Route element={<Layout5 />}>
@@ -228,10 +275,9 @@ const Markup = () => {
 function Layout1() {
   const { sidebariconHover } = useContext(ThemeContext);
   const sideMenu = useSelector(state => state.sideMenu);
-  let windowsize = window.innerWidth;
   return (
     <div id="main-wrapper" className={` show  ${sidebariconHover ? "iconhover-toggle" : ""} ${sideMenu ? "menu-toggle" : ""}`}>
-      <div className={`wallet-open  ${windowsize > 1199 ? 'active' : ''}`}>
+      <div className={`wallet-open`}>
         <Nav2 />
         <div className="content-body" style={{ minHeight: window.screen.height + 20 }}>
           <div className="container-fluid">
@@ -269,10 +315,38 @@ function Layout5() {
   const sideMenu = useSelector(state => state.sideMenu);
   const { sidebariconHover } = useContext(ThemeContext);
   return (
-    <div id="main-wrapper" className={`show ${sidebariconHover ? "iconhover-toggle" : ""} ${sideMenu ? "menu-toggle" : ""}`}>
+    <div id="main-wrapper" className={`show ${sidebariconHover ? "iconhover-toggle" : ""} ${sideMenu ? "menu-toggle" : ""}`}
+         style={{ 
+           transform: 'none', 
+           zoom: 1, 
+           scale: 1, 
+           position: 'relative',
+           width: '100%',
+           maxWidth: 'none',
+           margin: '0 auto',
+           overflowX: 'hidden'
+         }}>
       <Nav />
-      <div className="content-body message-body mh-auto">
-        <div className="container-fluid mh-auto p-0">
+      <div className="content-body message-body mh-auto"
+           style={{ 
+             transform: 'none', 
+             zoom: 1, 
+             scale: 1,
+             marginLeft: 0,
+             width: '100%',
+             paddingTop: '20px'
+           }}>
+        <div className="container-fluid mh-auto p-0"
+             style={{ 
+               transform: 'none', 
+               zoom: 1, 
+               scale: 1,
+               width: '100%',
+               maxWidth: 'none',
+               margin: 0,
+               paddingLeft: '20px',
+               paddingRight: '20px'
+             }}>
           <Outlet />
         </div>
       </div>

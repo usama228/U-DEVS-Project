@@ -1,11 +1,10 @@
-import React,{useState, useContext, useEffect} from 'react';
+import {useState} from 'react';
 import  DatePicker  from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import loadable from "@loadable/component";
 import pMinDelay from "p-min-delay";
 
 //Import Components
-import { ThemeContext } from "../../../context/ThemeContext";
 import { SVGICON } from './Content';
 import { TeacherDetails } from './Elements/TeacherDetails';
 import { UnpaidStudentTable } from './Elements/UnpaidStudentTable';
@@ -27,11 +26,6 @@ const cardBlog = [
 ];
 
 const Home = () => {
-	const { changeBackground } = useContext(ThemeContext);
-	useEffect(() => {
-		changeBackground({ value: "light", label: "Light" });
-	}, []);
-
 	const [startDate, setStartDate] = useState(null);	
 	return(
 		<>

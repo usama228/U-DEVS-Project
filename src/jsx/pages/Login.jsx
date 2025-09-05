@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { connect, useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom'
 import {
@@ -13,16 +13,33 @@ import logolight from "../../assets/images/logo-white.png";
 import pol from "../../assets/images/pol.jpg";
 
 function Login(props) {
-
-	const [email, setEmail] = useState('demo@example.com');
+	const [email, setEmail] = useState('');
 	let errorsObj = { email: '', password: '' };
 	const [errors, setErrors] = useState(errorsObj);
-	const [password, setPassword] = useState('123456');
+	const [password, setPassword] = useState('');
+	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	const dispatch = useDispatch();
-	const navigate = useNavigate()
+	const navigate = useNavigate();
+
+	// Ensure fields are empty on component mount
+	useEffect(() => {
+		setEmail('');
+		setPassword('');
+		// Force clear any cached values
+		const emailInput = document.querySelector('input[type="email"]');
+		const passwordInput = document.querySelector('input[type="password"]');
+		if (emailInput) emailInput.value = '';
+		if (passwordInput) passwordInput.value = '';
+	}, []);
+
 	function onLogin(e) {
 		e.preventDefault();
+		
+		if (isSubmitting) {
+			return;
+		}
+		
 		let error = false;
 		const errorObj = { ...errorsObj };
 		if (email === '') {
@@ -37,12 +54,17 @@ function Login(props) {
 		if (error) {
 			return;
 		}
+		
+		setIsSubmitting(true);
 		dispatch(loadingToggleAction(true));
 		dispatch(loginAction(email, password, navigate));
+		
+		// Reset submitting state after a delay
+		setTimeout(() => setIsSubmitting(false), 3000);
 	}
 
 	const element = document.querySelector("body");
-	let dataTheme = element.getAttribute("data-theme-version");
+	let dataTheme = element?.getAttribute("data-theme-version") || "light";
 
 	return (
 		<div className="container h-100">
@@ -61,20 +83,17 @@ function Login(props) {
 										</div>
 										{
 											dataTheme === "light" ?
-												<img src={BgImage} className="slideskew img-fix bitcoin-img" />
+												<img src={BgImage} className="slideskew img-fix bitcoin-img" alt="Background" />
 												:
-												<img src={BgImage} className=" slideskew img-fix bitcoin-img " />
+												<img src={BgImage} className=" slideskew img-fix bitcoin-img " alt="Background" />
 										}
 									</div>
 								</div>
 								<div className="col-xl-6 col-md-6" >
 									<div className="sign-in-your px-2">
-										<h4 className="fs-20 ">Sign in your account</h4>
-										<span>Welcome back! Login with your data that you entered during registration</span>
-										<div className="login-social">
-											<Link to={"#"} className="btn btn-primary  d-block my-3"><i className="fab fa-google me-2"></i>Login with Google</Link>
-											<Link to={"#"} className="btn btn-secondary  d-block my-3"><i className="fab fa-facebook-f me-2 facebook-log"></i>Login with Facebook</Link>
-										</div>
+										<h4 className="fs-20 ">Internship Management System</h4>
+										<span>Welcome back! Please login with your credentials</span>
+
 										{props.errorMessage && (
 											<div className='bg-red-300 text-red-900 border border-red-900 p-1 my-2'>
 												{props.errorMessage}
@@ -85,13 +104,19 @@ function Login(props) {
 												{props.successMessage}
 											</div>
 										)}
-										<form onSubmit={onLogin}>
+										<form onSubmit={onLogin} autoComplete="off">
 											<div className="mb-3">
 												<label className="mb-1"><strong>Email</strong><span className='required'>*</span></label>
-												<input type="email" className="form-control"
+												<input 
+													type="email" 
+													className="form-control"
 													value={email}
 													onChange={(e) => setEmail(e.target.value)}
-													placeholder="Type Your Email Address"
+													placeholder="your@example.com"
+													autoComplete="new-email"
+													autoCorrect="off"
+													autoCapitalize="off"
+													spellCheck="false"
 												/>
 
 												{errors.email && <div className="text-danger fs-12">{errors.email}</div>}
@@ -102,10 +127,12 @@ function Login(props) {
 													type="password"
 													className="form-control"
 													value={password}
-													placeholder="Type Your Password"
-													onChange={(e) =>
-														setPassword(e.target.value)
-													}
+													placeholder="••••••••"
+													onChange={(e) => setPassword(e.target.value)}
+													autoComplete="new-password"
+													autoCorrect="off"
+													autoCapitalize="off"
+													spellCheck="false"
 												/>
 												{errors.password && <div className="text-danger fs-12">{errors.password}</div>}
 											</div>
@@ -113,16 +140,28 @@ function Login(props) {
 												<div className="mb-3">
 													<div className="form-check custom-checkbox ms-1">
 														<input type="checkbox" className="form-check-input" id="basic_checkbox_1" />
-														<label className="form-check-label" htmlFor="basic_checkbox_1">Remember my preference</label>
+														<label className="form-check-label" htmlFor="basic_checkbox_1">Remember me</label>
 													</div>
 												</div>
-												<div className="mb-3">
-													<Link to="/page-register">Sign up</Link>
-												</div>
+
 											</div>
 											<div className="text-center">
-												<button type="submit" className="btn btn-primary btn-block">Sign Me In</button>
+												<button 
+													type="submit" 
+													className="btn btn-primary btn-block"
+													disabled={isSubmitting || props.showLoading}
+												>
+													{isSubmitting || props.showLoading ? (
+														<>
+															<span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+															Signing In...
+														</>
+													) : (
+														'Sign Me In'
+													)}
+												</button>
 											</div>
+
 										</form>
 									</div>
 								</div>
