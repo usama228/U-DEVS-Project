@@ -1,0 +1,161 @@
+/* Critical CSS Reset for Layout Issues */
+
+/* Global reset to prevent any zoom/scale/transform issues */
+* {
+    zoom: 1 !important;
+    -webkit-zoom: 1 !important;
+    -moz-zoom: 1 !important;
+    transform: none !important;
+    -webkit-transform: none !important;
+    -moz-transform: none !important;
+    -ms-transform: none !important;
+    scale: 1 !important;
+    -webkit-scale: 1 !important;
+    -moz-scale: 1 !important;
+}
+
+html {
+    zoom: 1 !important;
+    transform: none !important;
+    scale: 1 !important;
+    font-size: 16px !important;
+    width: 100% !important;
+    overflow-x: hidden !important;
+}
+
+body {
+    zoom: 1 !important;
+    transform: none !important;
+    scale: 1 !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow-x: hidden !important;
+}
+
+#root {
+    zoom: 1 !important;
+    transform: none !important;
+    scale: 1 !important;
+    width: 100% !important;
+}
+
+#main-wrapper {
+    zoom: 1 !important;
+    transform: none !important;
+    scale: 1 !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    position: relative !important;
+    overflow-x: hidden !important;
+}
+
+.content-body {
+    zoom: 1 !important;
+    transform: none !important;
+    scale: 1 !important;
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-top: 20px !important;
+    position: relative !important;
+}
+
+.container-fluid {
+    zoom: 1 !important;
+    transform: none !important;
+    scale: 1 !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+}
+
+/* Override any problematic data attributes */
+[data-layout],
+[data-sidebar-style],
+[data-container],
+[data-sidebar-position],
+[data-header-position] {
+    zoom: 1 !important;
+    transform: none !important;
+    scale: 1 !important;
+}
+
+[data-layout] .content-body,
+[data-sidebar-style] .content-body,
+[data-container] .content-body {
+    padding-top: 20px !important;
+    margin-left: 0 !important;
+    width: 100% !important;
+    zoom: 1 !important;
+    transform: none !important;
+    scale: 1 !important;
+}
+
+/* Fix common layout issues */
+.row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    zoom: 1 !important;
+    transform: none !important;
+    scale: 1 !important;
+}
+
+[class*="col-"] {
+    zoom: 1 !important;
+    transform: none !important;
+    scale: 1 !important;
+}
+
+.card {
+    zoom: 1 !important;
+    transform: none !important;
+    scale: 1 !important;
+}
+
+.page-titles {
+    zoom: 1 !important;
+    transform: none !important;
+    scale: 1 !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 20px !important;
+}
+
+/* Ensure header doesn't cause issues */
+.header {
+    zoom: 1 !important;
+    transform: none !important;
+    scale: 1 !important;
+    width: 100% !important;
+    padding-left: 0 !important;
+    margin-left: 0 !important;
+}
+
+.header .header-content {
+    zoom: 1 !important;
+    transform: none !important;
+    scale: 1 !important;
+    width: 100% !important;
+    margin-left: 0 !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+}
+
+/* Responsive design */
+@media (max-width: 1200px) {
+    .container-fluid {
+        padding-left: 15px !important;
+        padding-right: 15px !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .container-fluid {
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+    }
+}

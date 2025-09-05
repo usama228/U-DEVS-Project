@@ -7,13 +7,23 @@ import {
 import { MockAuthService } from './MockBackendService';
 
 // Check if we're in development mode and no backend is available
-const USE_MOCK = import.meta.env.DEV && !import.meta.env.VITE_API_URL;
+const USE_MOCK = false; // Disable mock for now to test real backend
 
 export function signUp(userData) {
     if (USE_MOCK) {
         return MockAuthService.signup(userData);
     }
-    return axiosInstance.post('/auth/signup', userData);
+    const formData = new FormData();
+    Object.keys(userData).forEach(key => {
+        if (userData[key] !== null && userData[key] !== undefined) {
+            formData.append(key, userData[key]);
+        }
+    });
+    return axiosInstance.post('/auth/register', formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    });
 }
 
 export function login(email, password) {
@@ -57,30 +67,76 @@ export function runLogoutTimer(dispatch, timer, navigate) {
 
 export function checkAutoLogin(dispatch, navigate) {
     const tokenDetailsString = localStorage.getItem('userDetails');
-    let tokenDetails = '';
+    
     if (!tokenDetailsString) {
-        dispatch(Logout(navigate));
+        console.log('No token found, user not authenticated');
         return;
     }
 
     try {
-        tokenDetails = JSON.parse(tokenDetailsString);
-        let expireDate = new Date(tokenDetails.expireDate);
-        let todaysDate = new Date();
-
-        if (todaysDate > expireDate) {
-            dispatch(Logout(navigate));
+        const tokenDetails = JSON.parse(tokenDetailsString);
+        
+        if (!tokenDetails.expireDate) {
+            console.log('No expiration date found, clearing invalid token');
+            localStorage.removeItem('userDetails');
             return;
         }
-            
+        
+        const expireDate = new Date(tokenDetails.expireDate);
+        const todaysDate = new Date();
+
+        if (todaysDate > expireDate) {
+            console.log('Token expired, clearing expired token');
+            localStorage.removeItem('userDetails');
+            return;
+        }
+        
+        console.log('Valid token found, logging in user');
         dispatch(loginConfirmedAction(tokenDetails));
         
         const timer = expireDate.getTime() - todaysDate.getTime();
         runLogoutTimer(dispatch, timer, navigate);
     } catch (error) {
         console.error('Error parsing stored token:', error);
-        dispatch(Logout(navigate));
+        localStorage.removeItem('userDetails');
     }
+}
+
+export function updateProfile(userData) {
+    const formData = new FormData();
+    Object.keys(userData).forEach(key => {
+        if (userData[key] !== null && userData[key] !== undefined) {
+            formData.append(key, userData[key]);
+        }
+    });
+    return axiosInstance.put('/auth/profile', formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    });
+}
+
+export function changePassword(currentPassword, newPassword) {
+    return axiosInstance.put('/auth/change-password', {
+        currentPassword,
+        newPassword
+    });
+}
+
+export function getProfile() {
+    return axiosInstance.get('/auth/profile');
+}
+
+export function getUserDetails() {
+    const tokenDetailsString = localStorage.getItem('userDetails');
+    if (tokenDetailsString) {
+        try {
+            return JSON.parse(tokenDetailsString);
+        } catch (error) {
+            return null;
+        }
+    }
+    return null;
 }
 
 export function isLogin() {

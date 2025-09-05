@@ -1,4 +1,5 @@
-import { lazy, Suspense, useEffect } from 'react';
+/* eslint-disable react/prop-types */
+import { lazy, Suspense, useEffect, useState } from 'react';
 /// Components
 import Index from './jsx/index';
 import { connect, useDispatch } from 'react-redux';
@@ -9,18 +10,16 @@ import {
     // isLogin 
 } from './services/AuthService';
 import { isAuthenticated } from './store/selectors/AuthSelectors';
+import { ToastContainer } from 'react-toastify';
 /// Style
 import './assets/vendor/swiper/css/swiper-bundle.min.css';
-import "./assets/vendor/bootstrap-select/dist/css/bootstrap-select.min.css";
 import "./assets/css/style.css";
+import './jsx/pages/pages.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const SignUp = lazy(() => import('./jsx/pages/Registration'));
-const Login = lazy(() => {
-    return new Promise(resolve => {
-        setTimeout(() => resolve(import('./jsx/pages/Login')), 500);
-    });
-});
+const Login = lazy(() => import('./jsx/pages/Login'));
 
 function withRouter(Component) {
     function ComponentWithRouterProp(props) {
@@ -42,11 +41,33 @@ function withRouter(Component) {
 function App(props) {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const [isInitialized, setIsInitialized] = useState(false);
+    
     useEffect(() => {
+        console.log('App mounted, checking auto login...');
         checkAutoLogin(dispatch, navigate);
-    }, []);
+        setIsInitialized(true);
+    }, [dispatch, navigate]);
 
-    let routeblog = (
+    useEffect(() => {
+        console.log('Authentication state changed:', props.isAuthenticated);
+    }, [props.isAuthenticated]);
+
+    // Show loading while initializing
+    if (!isInitialized) {
+        return (
+            <div className="vh-100 d-flex justify-content-center align-items-center" style={{ backgroundColor: '#f8f9fa' }}>
+                <div className="text-center">
+                    <div className="spinner-border text-primary" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                    </div>
+                    <p className="mt-2">Initializing...</p>
+                </div>
+            </div>
+        );
+    }
+
+    const authRoutes = (
         <Routes>
             <Route path="/" element={<Navigate to="/login" replace />} />
             <Route path='/login' element={<Login />} />
@@ -54,6 +75,7 @@ function App(props) {
             <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
     );
+
     if (props.isAuthenticated) {
         return (
             <>
@@ -69,6 +91,17 @@ function App(props) {
                 >
                     <Index />
                 </Suspense>
+                <ToastContainer
+                    position="top-right"
+                    autoClose={5000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                />
             </>
         );
 
@@ -85,8 +118,19 @@ function App(props) {
                     </div>
                 }
                 >
-                    {routeblog}
+                    {authRoutes}
                 </Suspense>
+                <ToastContainer
+                    position="top-right"
+                    autoClose={5000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                />
             </div>
         );
     }
@@ -98,4 +142,4 @@ const mapStateToProps = (state) => {
     };
 };
 
-export default withRouter(connect(mapStateToProps)(App)); 
+export default withRouter(connect(mapStateToProps)(App));

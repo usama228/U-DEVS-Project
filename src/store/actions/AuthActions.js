@@ -20,11 +20,12 @@ export function signupAction(userData, navigate) {
     return (dispatch) => {
         signUp(userData)
         .then((response) => {
-            const { token, user } = response.data;
+            const { data } = response.data; // Backend returns { success: true, data: { user, token } }
+            const { token, user } = data;
             const tokenDetails = {
                 token,
                 user,
-                expiresIn: 3600, // 1 hour
+                expiresIn: 604800, // 7 days
             };
             saveTokenInLocalStorage(tokenDetails);
             runLogoutTimer(
@@ -43,7 +44,9 @@ export function signupAction(userData, navigate) {
 
 export function Logout(navigate) {
     localStorage.removeItem('userDetails');
-    navigate('/login');    
+    if (navigate) {
+        navigate('/login');
+    }
     return {
         type: LOGOUT_ACTION,
     };
@@ -51,24 +54,35 @@ export function Logout(navigate) {
 
 export function loginAction(email, password, navigate) {
     return (dispatch) => {
-         login(email, password)
+        console.log('Login action dispatched', { email, password: '***' });
+        
+        login(email, password)
             .then((response) => { 
-                const { token, user } = response.data;
+                console.log('Login response received:', response);
+                const { data } = response.data; // Backend returns { success: true, data: { user, token } }
+                const { token, user } = data;
                 const tokenDetails = {
                     token,
                     user,
-                    expiresIn: 3600, // 1 hour
+                    expiresIn: 604800, // 7 days (backend JWT expiry)
                 };
+                console.log('Saving token details:', tokenDetails);
                 saveTokenInLocalStorage(tokenDetails);
                 runLogoutTimer(
                     dispatch,
                     tokenDetails.expiresIn * 1000,
                     navigate,
                 );
-               dispatch(loginConfirmedAction(tokenDetails));                          
+                dispatch(loginConfirmedAction(tokenDetails));                          
+                console.log('Navigating to dashboard');
                 navigate('/dashboard');                
             })
             .catch((error) => {                
+                console.error('Login error:', error);
+                dispatch({
+                    type: LOADING_TOGGLE_ACTION,
+                    payload: false,
+                });
                 const errorMessage = formatError(error);
                 dispatch(loginFailedAction(errorMessage));
             });

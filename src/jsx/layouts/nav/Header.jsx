@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { Dropdown } from "react-bootstrap";
 
 import LogoutPage from './Logout';
+import { getUserDetails } from '../../../services/AuthService';
 
 /// Image
 import profile from "../../../assets/images/user.jpg";
@@ -29,11 +30,31 @@ const searchList = [
 const Header = ({ onNote }) => {
 	//For header fixed 
 	const [headerFix, setheaderFix] = useState(false);
+	const [userDetails, setUserDetails] = useState(null);
+
 	useEffect(() => {
 		window.addEventListener("scroll", () => {
 			setheaderFix(window.scrollY > 50);
 		});
+
+		// Get user details
+		const fetchUserDetails = () => {
+			try {
+				const details = getUserDetails();
+				setUserDetails(details);
+			} catch (error) {
+				console.error('Error fetching user details:', error);
+			}
+		};
+
+		fetchUserDetails();
 	}, []);
+
+	// Format role for display
+	const formatRole = (role) => {
+		if (!role) return 'User';
+		return role.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase());
+	};
 
 
 	const { background, changeBackground } = useContext(ThemeContext);
@@ -386,8 +407,13 @@ const Header = ({ onNote }) => {
 														<img src={profile} className="ms-0" alt="" />
 													</li>
 													<li className="ms-2">
-														<h4 className="mb-0">Nella Vita</h4>
-														<span>Admin</span>
+														<h4 className="mb-0">
+															{userDetails?.user ? 
+																`${userDetails.user.firstName} ${userDetails.user.lastName}` 
+																: 'User'
+															}
+														</h4>
+														<span>{formatRole(userDetails?.user?.role)}</span>
 													</li>
 												</ul>
 
