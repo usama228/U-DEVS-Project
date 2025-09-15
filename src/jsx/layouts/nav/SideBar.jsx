@@ -203,8 +203,8 @@ const SideBar = () => {
           </ul>	
         
             <div className="copyright">
-              <p><strong>School Admission Dashboard</strong></p>
-              <p className="fs-12">Made with <span className="heart" onClick={heartBlast}></span> by DexignLab</p>
+              <p><strong>UDev</strong></p>
+              <p className="fs-12">Made with <span className="heart" onClick={heartBlast}></span> by UDev</p>
             </div>
           </div>
       </div>
