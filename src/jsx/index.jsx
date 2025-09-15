@@ -15,15 +15,25 @@ import ScrollToTop from "./layouts/ScrollToTop";
 import WalletBar from './layouts/WalletBar';
 /// Dashboard
 import Home from "./components/Dashboard/Home";
-import Finance from "./components/Dashboard/Finance";
+import Analysis from "./pages/Analysis";
 import DashboardDark from "./components/Dashboard/DashboardDark";
 import Dashboard from "./pages/Dashboard";
 
 /// User Management
 import Users from "./pages/Users";
+import TeamLeads from "./pages/TeamLeads";
+import Employees from "./pages/Employees";
+import Interns from "./pages/Interns";
 import ProtectedRoute from "../components/ProtectedRoute";
 import Profile from "./pages/Profile";
 import CreateUser from "./pages/CreateUser";
+
+// Task Management
+import AllTasks from "./pages/AllTasks";
+import CreateTask from "./pages/CreateTask";
+import ViewTask from "./pages/ViewTask";
+import MyTasks from "./pages/MyTasks";
+
 
 //student
 import Students from "./components/Student/Students";
@@ -122,80 +132,87 @@ import { ThemeContext } from "../context/ThemeContext";
 
 const Markup = () => {
   const routhPath = [
-    { url: "finance", component: <Finance /> },
-    { url: "student", component: <Students /> },
-    { url: "student-detail", component: <StudentDetails /> },
-    { url: "add-student", component: <AddNewStudent /> },
-    { url: "teacher", component: <Teachers /> },
-    { url: "teacher-detail", component: <TeachersDetail /> },
-    { url: "add-teacher", component: <AddNewTeacher /> },
-    { url: "food", component: <Food /> },
-    { url: "food-details", component: <FoodDetails /> },
-    { url: "user", component: <User /> },
-    { url: "activity", component: <Activity /> },
-    { url: "calendar", component: <HomeCalendar /> },
+    { url: "analysis", component: <Analysis />, protected: true },
+    { url: "student", component: <Students />, protected: true },
+    { url: "student-detail", component: <StudentDetails />, protected: true },
+    { url: "add-student", component: <AddNewStudent />, protected: true },
+    { url: "teacher", component: <Teachers />, protected: true },
+    { url: "teacher-detail", component: <TeachersDetail />, protected: true },
+    { url: "add-teacher", component: <AddNewTeacher />, protected: true },
+    { url: "food", component: <Food />, protected: true },
+    { url: "food-details", component: <FoodDetails />, protected: true },
+    { url: "user", component: <User />, protected: true },
+    { url: "activity", component: <Activity />, protected: true },
+    { url: "calendar", component: <HomeCalendar />, protected: true },
     // User Management
-    { url: "users", component: <Users /> },
-    { url: "profile", component: <Profile /> },
-    { url: "create-user", component: <CreateUser /> },
+    { url: "users", component: <Users />, protected: true },
+    { url: "team-leads", component: <TeamLeads />, protected: true },
+    { url: "employees", component: <Employees />, protected: true },
+    { url: "interns", component: <Interns />, protected: true },
+    { url: "profile", component: <Profile />, protected: true },
+    { url: "create-user", component: <CreateUser />, protected: true },
+    // Task Management
+    { url: "all-tasks", component: <AllTasks />, protected: true },
+    { url: "create-task", component: <CreateTask />, protected: true },
+    { url: "task/:id", component: <ViewTask />, protected: true }, // Added route for ViewTask
+    { url: "my-tasks", component: <MyTasks />, protected: true },
     //App Profile
-    { url: "app-profile", component: <AppProfile /> },
-    { url: "post-details", component: <PostDetails /> },
-    { url: "edit-profile", component: <EditProfile /> },
-    { url: "app-calender", component: <Calendar /> },
+    { url: "app-profile", component: <AppProfile />, protected: true },
+    { url: "post-details", component: <PostDetails />, protected: true },
+    { url: "edit-profile", component: <EditProfile />, protected: true },
+    { url: "app-calender", component: <Calendar />, protected: true },
     //App -> shops
-    { url: "ecom-product-grid", component: <ProductGrid /> },
-    { url: "ecom-product-list", component: <ProductList /> },
-    { url: "ecom-product-detail", component: <ProductDetail /> },
-    { url: "ecom-product-order", component: <ProductOrder /> },
-    { url: "ecom-checkout", component: <Checkout /> },
-    { url: "ecom-invoice", component: <Invoice /> },
-    { url: "ecom-customers", component: <Customers /> },
+    { url: "ecom-product-grid", component: <ProductGrid />, protected: true },
+    { url: "ecom-product-list", component: <ProductList />, protected: true },
+    { url: "ecom-product-detail", component: <ProductDetail />, protected: true },
+    { url: "ecom-product-order", component: <ProductOrder />, protected: true },
+    { url: "ecom-checkout", component: <Checkout />, protected: true },
+    { url: "ecom-invoice", component: <Invoice />, protected: true },
+    { url: "ecom-customers", component: <Customers />, protected: true },
     //Charts
-    { url: "chart-apexchart", component: <ApexChart /> },
-    { url: "chart-rechart", component: <RechartJs /> },
-    { url: "chart-chartjs", component: <ChartJs /> },
-    { url: "chart-sparkline", component: <SparklineChart /> },
+    { url: "chart-apexchart", component: <ApexChart />, protected: true },
+    { url: "chart-rechart", component: <RechartJs />, protected: true },
+    { url: "chart-chartjs", component: <ChartJs />, protected: true },
+    { url: "chart-sparkline", component: <SparklineChart />, protected: true },
 
     //bootstrap
-    { url: "ui-modal", component: <UiModal /> },
-    { url: 'ui-popover', component: <UiPopOver /> },
-    { url: "ui-typography", component: <UiTypography /> },
-    { url: "ui-grid", component: <UiGrid /> },
+    { url: "ui-modal", component: <UiModal />, protected: true },
+    { url: 'ui-popover', component: <UiPopOver />, protected: true },
+    { url: "ui-typography", component: <UiTypography />, protected: true },
+    { url: "ui-grid", component: <UiGrid />, protected: true },
 
     //Plugins
-    { url: "uc-select2", component: <Select2 /> },
-    { url: "uc-noui-slider", component: <MainNouiSlider /> },
-    { url: "uc-toastr", component: <Toastr /> },
-    { url: "uc-lightgallery", component: <Lightgallery /> },
-    { url: "uc-sweetalert", component: <MainSweetAlert /> },
-    { url: "form-element", component: <Element /> },
-    { url: "form-wizard", component: <Wizard /> },
-    { url: "form-ckeditor", component: <CkEditor /> },
-    { url: "form-validation", component: <FormValidation /> },
+    { url: "uc-select2", component: <Select2 />, protected: true },
+    { url: "uc-noui-slider", component: <MainNouiSlider />, protected: true },
+    { url: "uc-toastr", component: <Toastr />, protected: true },
+    { url: "uc-lightgallery", component: <Lightgallery />, protected: true },
+    { url: "uc-sweetalert", component: <MainSweetAlert />, protected: true },
+    { url: "form-element", component: <Element />, protected: true },
+    { url: "form-wizard", component: <Wizard />, protected: true },
+    { url: "form-ckeditor", component: <CkEditor />, protected: true },
+    { url: "form-validation", component: <FormValidation />, protected: true },
     //widget
-    { url: "widget", component: <Widget /> },
+    { url: "widget", component: <Widget />, protected: true },
     /// table
-    { url: 'table-filtering', component: <FilteringTable /> },
-    { url: 'table-sorting', component: <SortingTable /> },
-    { url: "table-bootstrap-basic", component: <BootstrapTable /> },
-    { url: "form-pickers", component: <Pickers /> },
-
+    { url: 'table-filtering', component: <FilteringTable />, protected: true },
+    { url: 'table-sorting', component: <SortingTable />, protected: true },
+    { url: "table-bootstrap-basic", component: <BootstrapTable />, protected: true },
+    { url: "form-pickers", component: <Pickers />, protected: true },
   ]
   const routhPath2 = [
     //Bootstrap
-    { url: "ui-accordion", component: <UiAccordion /> },
-    { url: "ui-alert", component: <UiAlert /> },
-    { url: "ui-badge", component: <UiBadge /> },
-    { url: "ui-button", component: <UiButton /> },
-    { url: "ui-button-group", component: <UiButtonGroup /> },
-    { url: "ui-list-group", component: <UiListGroup /> },
-    { url: "ui-card", component: <UiCards /> },
-    { url: '/ui-carousel', component: <UiCarousel /> },
-    { url: '/ui-dropdown', component: <UiDropDown /> },
-    { url: '/ui-progressbar', component: <UiProgressBar /> },
-    { url: '/ui-tab', component: <UiTab /> },
-    { url: '/ui-pagination', component: <UiPagination /> },
+    { url: "ui-accordion", component: <UiAccordion />, protected: true },
+    { url: "ui-alert", component: <UiAlert />, protected: true },
+    { url: "ui-badge", component: <UiBadge />, protected: true },
+    { url: "ui-button", component: <UiButton />, protected: true },
+    { url: "ui-button-group", component: <UiButtonGroup />, protected: true },
+    { url: "ui-list-group", component: <UiListGroup />, protected: true },
+    { url: "ui-card", component: <UiCards />, protected: true },
+    { url: '/ui-carousel', component: <UiCarousel />, protected: true },
+    { url: '/ui-dropdown', component: <UiDropDown />, protected: true },
+    { url: '/ui-progressbar', component: <UiProgressBar />, protected: true },
+    { url: '/ui-tab', component: <UiTab />, protected: true },
+    { url: '/ui-pagination', component: <UiPagination />, protected: true },
   ];
 
   return (
@@ -214,26 +231,8 @@ const Markup = () => {
         </Route>
         <Route element={<Layout2 />}>
           {routhPath.map((data, i) => {
-            // Apply route protection based on URL and role requirements
-            const protectedRoutes = ['users', 'create-user', 'teacher', 'add-teacher', 'teacher-detail'];
-            const teamLeadRoutes = ['student', 'student-detail', 'add-student', 'food', 'food-details'];
-            
-            if (protectedRoutes.includes(data.url)) {
-              return (
-                <Route 
-                  key={i} 
-                  exact 
-                  path={`/${data.url}`} 
-                  element={
-                    <ProtectedRoute requiredRoute={`/${data.url}`}>
-                      {data.component}
-                    </ProtectedRoute>
-                  } 
-                />
-              );
-            }
-            
-            if (teamLeadRoutes.includes(data.url)) {
+            // Apply ProtectedRoute to all routes if they have the protected flag
+            if (data.protected) {
               return (
                 <Route 
                   key={i} 
@@ -255,16 +254,52 @@ const Markup = () => {
         </Route>
 
         <Route element={<Layout5 />}>
-          <Route path='/file-manager' exact element={<FileManager />} />
-          <Route path='/chat' exact element={<FileChat />} />
-          <Route path='/email-compose' exact element={<Compose />} />
-          <Route path='/email-inbox' exact element={<Inbox />} />
-          <Route path='/email-read' exact element={<Read />} />
+          <Route path='/file-manager' exact element={
+            <ProtectedRoute requiredRoute="/file-manager">
+              <FileManager />
+            </ProtectedRoute>
+          } />
+          <Route path='/chat' exact element={
+            <ProtectedRoute requiredRoute="/chat">
+              <FileChat />
+            </ProtectedRoute>
+          } />
+          <Route path='/email-compose' exact element={
+            <ProtectedRoute requiredRoute="/email-compose">
+              <Compose />
+            </ProtectedRoute>
+          } />
+          <Route path='/email-inbox' exact element={
+            <ProtectedRoute requiredRoute="/email-inbox">
+              <Inbox />
+            </ProtectedRoute>
+          } />
+          <Route path='/email-read' exact element={
+            <ProtectedRoute required_route="/email-read">
+              <Read />
+            </ProtectedRoute>
+          } />
         </Route>
         <Route element={<Layout6 />}>
-          {routhPath2.map((data, i) => (
-            <Route key={i} exact path={`/${data.url}`} element={data.component} />
-          ))}
+          {routhPath2.map((data, i) => {
+            if (data.protected) {
+              return (
+                <Route 
+                  key={i} 
+                  exact 
+                  path={`/${data.url}`} 
+                  element={
+                    <ProtectedRoute requiredRoute={`/${data.url}`}>
+                      {data.component}
+                    </ProtectedRoute>
+                  } 
+                />
+              );
+            }
+            return (
+              <Route key={i} exact path={`/${data.url}`} element={data.component} />
+            );
+          })}
         </Route>
       </Routes>      
       <ScrollToTop />

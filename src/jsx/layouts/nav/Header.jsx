@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 
 import { Link } from "react-router-dom";
 /// Scroll
@@ -13,7 +13,6 @@ import avatar from "../../../assets/images/avatar/1.jpg";
 import avatar2 from "../../../assets/images/avatar/2.jpg";
 import avatar3 from "../../../assets/images/avatar/3.jpg";
 import avatar4 from "../../../assets/images/avatar/4.jpg";
-
 import { ThemeContext } from "../../../context/ThemeContext";
 
 const searchList = [
@@ -27,11 +26,31 @@ const searchList = [
 	{ image: avatar3, title: 'Lucas' },
 ];
 
+export function SideBarAdd() {
+	setTimeout(() => {
+		let walletopen = document.querySelector(".wallet-open");
+		if (walletopen.classList.contains('active')) {
+			walletopen.classList.remove("active");
+		} else {
+			walletopen.classList.add("active");
+		}
+	}, 200);
+}
+
 const Header = ({ onNote }) => {
-	//For header fixed 
-	const [headerFix, setheaderFix] = useState(false);
+	const { background, changeBackground } = useContext(ThemeContext);
 	const [userDetails, setUserDetails] = useState(null);
 
+	const handleThemeMode = () => {
+		if (background.value === 'dark') {
+			changeBackground({ value: "light", label: "Light" });
+		} else {
+			changeBackground({ value: "dark", label: "Dark" });
+		}
+	}
+
+	//For header fixed 
+	const [headerFix, setheaderFix] = useState(false);
 	useEffect(() => {
 		window.addEventListener("scroll", () => {
 			setheaderFix(window.scrollY > 50);
@@ -55,17 +74,8 @@ const Header = ({ onNote }) => {
 		if (!role) return 'User';
 		return role.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase());
 	};
+	//end
 
-
-	const { background, changeBackground } = useContext(ThemeContext);
-	const handleThemeMode = () => {
-		if (background.value === 'dark') {
-			changeBackground({ value: "light", label: "Light" });
-		} else {
-			changeBackground({ value: "dark", label: "Dark" });
-		}
-	}
-	const [changeScreen, setChangeScreen] = useState();
 	const fullscreenRef = useRef(null);
 	const EnterFullScreen = () => {
 		if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement) {
@@ -80,7 +90,7 @@ const Header = ({ onNote }) => {
 				document.webkitExitFullscreen();
 			}
 		}
-		else {
+		else { /* exit fullscreen */
 			if (document.documentElement.requestFullscreen) {
 				document.documentElement.requestFullscreen();
 			} else if (document.documentElement.webkitRequestFullscreen) {
@@ -92,6 +102,7 @@ const Header = ({ onNote }) => {
 			}
 		}
 	};
+
 	var path = window.location.pathname.split("/");
 	var name = path[path.length - 1].split("-");
 	var filterName = name.length >= 3 ? name.filter((n, i) => i > 0) : name;
@@ -118,6 +129,8 @@ const Header = ({ onNote }) => {
 											: filterName.includes("editor")
 												? filterName.filter((f) => f !== "editor")
 												: filterName;
+
+
 	return (
 		<div className={`header ${headerFix ? "sticky" : ""}`}>
 			<div className="header-content">
@@ -172,6 +185,13 @@ const Header = ({ onNote }) => {
 								</Dropdown.Menu>
 							</Dropdown>
 							<li className="nav-item dropdown notification_dropdown">
+								<Link to={"#"} className="nav-link  menu-wallet"
+									onClick={SideBarAdd}
+								>
+									<svg id="Layer_2" enableBackground="new 0 0 512 512" height="18" viewBox="0 0 512 512" width="18" xmlns="http://www.w3.org/2000/svg"><g><path d="m174 240h-108c-36.393 0-66-29.607-66-66v-108c0-36.393 29.607-66 66-66h108c36.393 0 66 29.607 66 66v108c0 36.393-29.607 66-66 66zm-108-208c-18.748 0-34 15.252-34 34v108c0 18.748 15.252 34 34 34h108c18.748 0 34-15.252 34-34v-108c0-18.748-15.252-34-34-34z" /><path d="m446 240h-108c-36.393 0-66-29.607-66-66v-108c0-36.393 29.607-66 66-66h108c36.393 0 66 29.607 66 66v108c0 36.393-29.607 66-66 66zm-108-208c-18.748 0-34 15.252-34 34v108c0 18.748 15.252 34 34 34h108c18.748 0 34-15.252 34-34v-108c0-18.748-15.252-34-34-34z" /><path d="m392 512c-66.168 0-120-53.832-120-120s53.832-120 120-120 120 53.832 120 120-53.832 120-120 120zm0-208c-48.523 0-88 39.477-88 88s39.477 88 88 88 88-39.477 88-88-39.477-88-88-88z" /><path d="m174 512h-108c-36.393 0-66-29.607-66-66v-108c0-36.393 29.607-66 66-66h108c36.393 0 66 29.607 66 66v108c0 36.393-29.607 66-66 66zm-108-208c-18.748 0-34 15.252-34 34v108c0 18.748 15.252 34 34 34h108c18.748 0 34-15.252 34-34v-108c0-18.748-15.252-34-34-34z" /></g></svg>
+								</Link>
+							</li>
+							<li className="nav-item dropdown notification_dropdown">
 								<Link to={"#"} className={`nav-link bell dz-theme-mode ${background.value === "dark" ? "active" : ""}`}
 									onClick={() => handleThemeMode()}
 								>
@@ -184,13 +204,9 @@ const Header = ({ onNote }) => {
 								</Link>
 							</li>
 							<li className="nav-item dropdown notification_dropdown">
-								<Link to={"#"} className={`nav-link bell dz-fullscreen ${changeScreen ? 'active' : ''}`}
+								<Link to={"#"} className="nav-link bell dz-fullscreen"
 									ref={fullscreenRef}
-									onClick={() => {
-										EnterFullScreen()
-										setChangeScreen(!changeScreen);
-									}
-									}
+									onClick={EnterFullScreen}
 								>
 									<svg id="icon-full-1" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" className="css-i6dzq1"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" style={{ strokeDasharray: "37, 57", strokeDashoffset: "0" }}></path></svg>
 									<svg id="icon-minimize-1" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="A098AE" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-minimize"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3" style={{ strokeDasharray: "37, 57", strokeDashoffset: "0" }}></path></svg>
@@ -408,18 +424,18 @@ const Header = ({ onNote }) => {
 													</li>
 													<li className="ms-2">
 														<h4 className="mb-0">
-															{userDetails?.user ? 
-																`${userDetails.user.firstName} ${userDetails.user.lastName}` 
+															{userDetails ? 
+																`${userDetails.firstName} ${userDetails.lastName}` 
 																: 'User'
 															}
 														</h4>
-														<span>{formatRole(userDetails?.user?.role)}</span>
+														<span>{formatRole(userDetails?.role)}</span>
 													</li>
 												</ul>
 
 											</div>
 											<div className="card-body p-3">
-												<Link to="/app-profile" className="dropdown-item ai-icon">
+												<Link to="/profile" className="dropdown-item ai-icon">
 													<svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" className="svg-main-icon">
 														<g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
 															<polygon points="0 0 24 0 24 24 0 24" />

@@ -8,8 +8,8 @@ export const UserService = {
     },
 
     // Get dashboard statistics
-    getDashboardStats: () => {
-        return axiosInstance.get('/users/dashboard-stats');
+    getDashboard: () => {
+        return axiosInstance.get('/users/dashboard');
     },
 
     // Get team leads

@@ -104,11 +104,23 @@ export function checkAutoLogin(dispatch, navigate) {
 
 export function updateProfile(userData) {
     const formData = new FormData();
-    Object.keys(userData).forEach(key => {
-        if (userData[key] !== null && userData[key] !== undefined) {
-            formData.append(key, userData[key]);
+    const processedUserData = { ...userData };
+
+    // Handle phone number format: remove leading zero
+    if (processedUserData.phone && typeof processedUserData.phone === 'string' && processedUserData.phone.startsWith('0')) {
+        processedUserData.phone = processedUserData.phone.substring(1);
+    }
+
+    // Append only non-null, non-undefined, and non-empty string values
+    Object.keys(processedUserData).forEach(key => {
+        const value = processedUserData[key];
+
+        // This condition ensures that no empty fields are sent to the backend
+        if (value !== null && value !== undefined && value !== '') {
+            formData.append(key, value);
         }
     });
+
     return axiosInstance.put('/auth/profile', formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
@@ -131,7 +143,8 @@ export function getUserDetails() {
     const tokenDetailsString = localStorage.getItem('userDetails');
     if (tokenDetailsString) {
         try {
-            return JSON.parse(tokenDetailsString);
+            const tokenDetails = JSON.parse(tokenDetailsString);
+            return tokenDetails.user; // Return the user object
         } catch (error) {
             return null;
         }

@@ -16,6 +16,7 @@ const Users = () => {
     const [modalType, setModalType] = useState(''); // 'edit', 'delete', 'view', 'status', 'role'
     const [selectedUser, setSelectedUser] = useState(null);
     const [formData, setFormData] = useState({ role: '', teamLeadId: '', isActive: true });
+    const [validationErrors, setValidationErrors] = useState({});
 
     useEffect(() => {
         fetchUsers();
@@ -67,6 +68,7 @@ const Users = () => {
         setSelectedUser(null);
         setModalType('');
         setFormData({ role: '', teamLeadId: '', isActive: true });
+        setValidationErrors({});
     };
 
     const handleUpdateStatus = async () => {
@@ -83,7 +85,39 @@ const Users = () => {
         }
     };
 
+    const validateRoleUpdate = () => {
+        const errors = {};
+        
+        // Role validation
+        if (!formData.role || formData.role.trim() === '') {
+            errors.role = 'Role is required';
+        } else if (!['admin', 'team_lead', 'employee', 'internee'].includes(formData.role)) {
+            errors.role = 'Please select a valid role';
+        }
+        
+        // Team Lead validation for internees
+        if (formData.role === 'internee') {
+            if (!formData.teamLeadId || formData.teamLeadId.trim() === '') {
+                errors.teamLeadId = 'Team Lead is required for internees';
+            }
+        }
+        
+        return errors;
+    };
+
     const handleUpdateRole = async () => {
+        // Validate the form before submission
+        const errors = validateRoleUpdate();
+        setValidationErrors(errors);
+        
+        if (Object.keys(errors).length > 0) {
+            // Display validation errors
+            Object.values(errors).forEach(error => {
+                toast.error(error);
+            });
+            return;
+        }
+
         try {
             const response = await UserService.updateUserRole(
                 selectedUser.id, 
@@ -97,7 +131,8 @@ const Users = () => {
             }
         } catch (error) {
             console.error('Error updating user role:', error);
-            toast.error('Failed to update user role');
+            const errorMessage = error.response?.data?.message || 'Failed to update user role';
+            toast.error(errorMessage);
         }
     };
 
@@ -322,29 +357,43 @@ const Users = () => {
                             </div>
                         </div>
                     )}
-                    {modalType === 'role' && selectedUser && (
+                     {modalType === 'role' && selectedUser && (
                         <div>
                             <p>Update role for <strong>{selectedUser.firstName} {selectedUser.lastName}</strong></p>
                             <div className="form-group mb-3">
-                                <label>Role:</label>
+                                <label>Role: <span className="text-danger">*</span></label>
                                 <select 
-                                    className="form-control"
+                                    className={`form-control ${validationErrors.role ? 'is-invalid' : ''}`}
                                     value={formData.role}
-                                    onChange={(e) => setFormData({...formData, role: e.target.value})}
+                                    onChange={(e) => {
+                                        setFormData({...formData, role: e.target.value});
+                                        // Clear validation error when user makes a selection
+                                        if (validationErrors.role) {
+                                            setValidationErrors({...validationErrors, role: ''});
+                                        }
+                                    }}
                                 >
+                                    <option value="">Select Role</option>
                                     <option value="admin">Admin</option>
                                     <option value="team_lead">Team Lead</option>
                                     <option value="employee">Employee</option>
                                     <option value="internee">Internee</option>
                                 </select>
+                                {validationErrors.role && <div className="invalid-feedback">{validationErrors.role}</div>}
                             </div>
                             {formData.role === 'internee' && (
                                 <div className="form-group">
-                                    <label>Team Lead:</label>
+                                    <label>Team Lead: <span className="text-danger">*</span></label>
                                     <select 
-                                        className="form-control"
+                                        className={`form-control ${validationErrors.teamLeadId ? 'is-invalid' : ''}`}
                                         value={formData.teamLeadId}
-                                        onChange={(e) => setFormData({...formData, teamLeadId: e.target.value})}
+                                        onChange={(e) => {
+                                            setFormData({...formData, teamLeadId: e.target.value});
+                                            // Clear validation error when user makes a selection
+                                            if (validationErrors.teamLeadId) {
+                                                setValidationErrors({...validationErrors, teamLeadId: ''});
+                                            }
+                                        }}
                                     >
                                         <option value="">Select Team Lead</option>
                                         {teamLeads.map(lead => (
@@ -353,6 +402,8 @@ const Users = () => {
                                             </option>
                                         ))}
                                     </select>
+                                    {validationErrors.teamLeadId && <div className="invalid-feedback">{validationErrors.teamLeadId}</div>}
+                                    <small className="form-text text-muted">Required when role is Internee</small>
                                 </div>
                             )}
                         </div>

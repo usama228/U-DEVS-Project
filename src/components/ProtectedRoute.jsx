@@ -7,26 +7,23 @@ const ProtectedRoute = ({ children, requiredRoute }) => {
     try {
         const userDetails = getUserDetails();
         
-        console.log('ProtectedRoute Debug:');
-        console.log('- userDetails:', userDetails);
-        console.log('- requiredRoute:', requiredRoute);
-        
         if (!userDetails || (!userDetails.user && !userDetails.role)) {
-            console.log('- Redirecting to login: no user details');
             return <Navigate to="/login" replace />;
         }
 
-        // Handle both possible structures: userDetails.user.role or userDetails.role
         const userRole = userDetails.user?.role || userDetails.role;
-        console.log('- userRole:', userRole);
         
         if (!userRole) {
-            console.log('- Redirecting to login: no role found');
             return <Navigate to="/login" replace />;
         }
         
-        const hasAccess = hasRouteAccess(userRole, requiredRoute);
-        console.log('- hasAccess:', hasAccess);
+        // Handle dynamic routes
+        let routeToCheck = requiredRoute;
+        if (routeToCheck.includes('/:id')) {
+            routeToCheck = routeToCheck.substring(0, routeToCheck.lastIndexOf('/'));
+        }
+
+        const hasAccess = hasRouteAccess(userRole, routeToCheck);
         
         if (!hasAccess) {
             return (

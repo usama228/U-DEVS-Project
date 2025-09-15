@@ -424,12 +424,12 @@ const Header2 = ({ onNote }) => {
 													</li>
 													<li className="ms-2">
 														<h4 className="mb-0">
-															{userDetails?.user ? 
-																`${userDetails.user.firstName} ${userDetails.user.lastName}` 
+															{userDetails ? 
+																`${userDetails.firstName} ${userDetails.lastName}` 
 																: 'User'
 															}
 														</h4>
-														<span>{formatRole(userDetails?.user?.role)}</span>
+														<span>{formatRole(userDetails?.role)}</span>
 													</li>
 												</ul>
 
