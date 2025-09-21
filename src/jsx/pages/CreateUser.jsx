@@ -9,6 +9,7 @@ const CreateUser = () => {
     const [teamLeads, setTeamLeads] = useState([]);
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState({});
+    const [showPassword, setShowPassword] = useState(false);
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -314,18 +315,28 @@ const CreateUser = () => {
                                         </div>
 
                                         <div className="col-md-6">
-                                            <div className="form-group mb-3">
+                                            <div className="form-group mb-3 position-relative">
                                                 <label className="form-label">
                                                     Password <span className="text-danger">*</span>
                                                 </label>
                                                 <input
-                                                    type="password"
+                                                    type={showPassword ? 'text' : 'password'}
                                                     name="password"
                                                     className={`form-control ${errors.password ? 'is-invalid' : ''}`}
                                                     value={formData.password}
                                                     onChange={handleInputChange}
                                                     placeholder="Enter password"
                                                 />
+                                                <span className="position-absolute end-0 translate-middle-y"
+                                                onClick={() => setShowPassword(!showPassword)}
+                                                style={{
+                                                    cursor: "pointer",
+                                                    paddingRight: "0.75rem",
+                                                    transform: "translateY(-50%)",
+                                                    paddingBottom: "2.4rem"
+                                                    }}>
+                                                    <i className={`fa ${showPassword ? "fa-eye-slash" : "fa-eye"}`}></i>
+                                                </span>
                                                 {errors.password && <div className="invalid-feedback">{errors.password}</div>}
                                             </div>
                                         </div>

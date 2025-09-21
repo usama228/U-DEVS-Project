@@ -42,14 +42,17 @@ export const MenuList = [
         title: 'Dashboard',
         classsChange: 'mm-collapse',
         iconStyle: <i className="material-symbols-outlined">dashboard</i>,
+        role: ['admin', 'team_lead', 'employee', 'internee'], // All roles can view dashboard
         content: [
             {
                 title: 'Overview',
                 to: 'dashboard',
+                role: ['admin', 'team_lead', 'employee', 'internee'], // All can view overview
             },
             {
                 title: 'Analysis',
                 to: 'analysis',
+                role: ['admin', 'team_lead', 'internee'],
             },
         ],
     },
@@ -113,7 +116,7 @@ export const MenuList = [
             {
                 title: 'My Tasks',
                 to: 'my-tasks',
-                role: ['employee', 'internee'] // All can see their own tasks
+                role: ['internee'] // Only internees can see their own tasks
             },
         ],
     },

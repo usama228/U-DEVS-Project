@@ -6,7 +6,7 @@ import contact3 from '../../assets/images/contacts/3.jpg';
 import contact4 from '../../assets/images/contacts/4.jpg';
 import contact5 from '../../assets/images/contacts/5.jpg';
 import contact6 from '../../assets/images/contacts/6.jpg';
-import avatar from '../../assets/images/no-img-avatar.png';
+import avatar from '../../assets/images/avatar/avatar-placeholder.webp';
 import logo from '../../assets/images/logo.png';
 import logoWhite from '../../assets/images/logo-white.png';
 import bg1 from '../../assets/images/bg1.png';

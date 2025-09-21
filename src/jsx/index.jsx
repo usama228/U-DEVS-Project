@@ -27,6 +27,7 @@ import Interns from "./pages/Interns";
 import ProtectedRoute from "../components/ProtectedRoute";
 import Profile from "./pages/Profile";
 import CreateUser from "./pages/CreateUser";
+import UserProfile from "./pages/UserProfile";
 
 // Task Management
 import AllTasks from "./pages/AllTasks";
@@ -151,10 +152,11 @@ const Markup = () => {
     { url: "interns", component: <Interns />, protected: true },
     { url: "profile", component: <Profile />, protected: true },
     { url: "create-user", component: <CreateUser />, protected: true },
+    { url: "user-profile/:id", component: <UserProfile />, protected: true },
     // Task Management
     { url: "all-tasks", component: <AllTasks />, protected: true },
     { url: "create-task", component: <CreateTask />, protected: true },
-    { url: "task/:id", component: <ViewTask />, protected: true }, // Added route for ViewTask
+    { url: "task/:id", component: <ViewTask />, protected: true },
     { url: "my-tasks", component: <MyTasks />, protected: true },
     //App Profile
     { url: "app-profile", component: <AppProfile />, protected: true },

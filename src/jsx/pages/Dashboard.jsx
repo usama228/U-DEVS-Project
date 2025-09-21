@@ -199,6 +199,7 @@ const Dashboard = () => {
                     </div>
                 );
             case 'employee':
+                return <></>;
             case 'internee':
                 return (
                     <div className="row">

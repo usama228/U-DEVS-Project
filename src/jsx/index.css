@@ -814,3 +814,12 @@ button.react-calendar__tile.react-calendar__tile--active.react-calendar__tile--r
 .rating-stars ul > li.star.selected > i.fa {
   color: #FF912C;
 }
+
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+    display: none;
+}
+input[type="password"]::-webkit-reveal,
+input[type="password"]::-webkit-clear-button {
+    display: none;
+}

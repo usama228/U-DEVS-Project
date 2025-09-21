@@ -16,13 +16,13 @@ const getAuthHeader = () => {
 // Corrected TaskService implementation
 export const TaskService = {
     // Fetches all tasks
-    getAllTasks: () => {
-        return axiosInstance.get('/tasks', { headers: getAuthHeader() });
+    getAllTasks: (params) => {
+        return axiosInstance.get('/tasks', { params, headers: getAuthHeader() });
     },
 
     // Fetches tasks assigned to the current user
-    getMyTasks: () => {
-        return axiosInstance.get('/tasks/my-tasks', { headers: getAuthHeader() });
+    getMyTasks: (params) => {
+        return axiosInstance.get('/tasks/my-tasks', { params, headers: getAuthHeader() });
     },
 
     // Fetches a single task by its ID

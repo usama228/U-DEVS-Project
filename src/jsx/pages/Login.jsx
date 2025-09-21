@@ -18,6 +18,7 @@ function Login(props) {
 	const [errors, setErrors] = useState(errorsObj);
 	const [password, setPassword] = useState('');
 	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [showPassword, setShowPassword] = useState(false);
 
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
@@ -62,6 +63,10 @@ function Login(props) {
 		// Reset submitting state after a delay
 		setTimeout(() => setIsSubmitting(false), 3000);
 	}
+
+	const togglePasswordVisibility = () => {
+		setShowPassword(!showPassword);
+	};
 
 	const element = document.querySelector("body");
 	let dataTheme = element?.getAttribute("data-theme-version") || "light";
@@ -121,10 +126,10 @@ function Login(props) {
 
 												{errors.email && <div className="text-danger fs-12">{errors.email}</div>}
 											</div>
-											<div className="mb-3">
+											<div className="mb-3 position-relative">
 												<label className="mb-1"><strong>Password</strong><span className='required'>*</span></label>
 												<input
-													type="password"
+													type={showPassword ? 'text' : 'password'}
 													className="form-control"
 													value={password}
 													placeholder="••••••••"
@@ -134,6 +139,16 @@ function Login(props) {
 													autoCapitalize="off"
 													spellCheck="false"
 												/>
+												<span className="position-absolute end-0 translate-middle-y"
+                                                onClick={() => setShowPassword(!showPassword)}
+                                                style={{
+                                                    cursor: "pointer",
+                                                    paddingRight: "0.75rem",
+                                                    transform: "translateY(-50%)",
+                                                    paddingBottom: "2.5rem"
+                                                    }}>
+                                                    <i className={`fa ${showPassword ? "fa-eye-slash" : "fa-eye"}`}></i>
+                                                </span>
 												{errors.password && <div className="text-danger fs-12">{errors.password}</div>}
 											</div>
 											<div className="row d-flex justify-content-between mt-4 mb-2">

@@ -135,6 +135,13 @@ export function changePassword(currentPassword, newPassword) {
     });
 }
 
+export function adminChangePassword(userId, newPassword) { // Added this function
+    return axiosInstance.put('/auth/admin/change-password', {
+        userId,
+        newPassword
+    });
+}
+
 export function getProfile() {
     return axiosInstance.get('/auth/profile');
 }

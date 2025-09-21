@@ -2,9 +2,11 @@ import React from 'react';
 import useDashboard from '../../hooks/useDashboard';
 import UserDistributionChart from '../components/Dashboard/Elements/UserDistributionChart';
 import TaskStatusChart from '../components/Dashboard/Elements/TaskStatusChart';
+import { getUserDetails } from '../../services/AuthService';
 
 const Analysis = () => {
     const { dashboardData, loading, error } = useDashboard();
+    const user = getUserDetails();
 
     if (loading) {
         return (
@@ -22,17 +24,19 @@ const Analysis = () => {
 
     return (
         <div className="row">
-            <div className="col-xl-6">
-                <div className="card">
-                    <div className="card-header">
-                        <h4 className="card-title">User Distribution</h4>
-                    </div>
-                    <div className="card-body">
-                        {dashboardData && <UserDistributionChart data={dashboardData} />}
+            {user && user.role === 'admin' && (
+                <div className="col-xl-6">
+                    <div className="card">
+                        <div className="card-header">
+                            <h4 className="card-title">User Distribution</h4>
+                        </div>
+                        <div className="card-body">
+                            {dashboardData && <UserDistributionChart data={dashboardData} />}
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div className="col-xl-6">
+            )}
+            <div className={user && user.role === 'admin' ? "col-xl-6" : "col-xl-12"}>
                 <div className="card">
                     <div className="card-header">
                         <h4 className="card-title">Task Status</h4>
