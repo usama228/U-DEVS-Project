@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Tab, Nav } from 'react-bootstrap';
-import { SVGICON } from '../components/bootstrap/SVGICON';
 import PageTitle from '../layouts/PageTitle';
 import { updateProfile, changePassword, getProfile } from '../../services/AuthService';
 import { toast } from 'react-toastify';
+import { IMAGE_URL } from '../../config';
+import ImageModal from '../../components/ImageModal';
+import { IMAGES } from '../constant/theme';
 
 const Profile = () => {
     const [userDetails, setUserDetails] = useState(null);
@@ -25,6 +27,10 @@ const Profile = () => {
         confirmPassword: ''
     });
     const [updating, setUpdating] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+    const [showNewPassword, setShowNewPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
 
     useEffect(() => {
         fetchUserDetails();
@@ -155,7 +161,7 @@ const Profile = () => {
     if (loading) {
         return <div className="d-flex justify-content-center align-items-center" style={{ height: '400px' }}><div className="spinner-border" role="status"><span className="visually-hidden">Loading...</span></div></div>;
     }
-
+    
     return (
         <div className="profile-wrapper">
             <div className="container-fluid">
@@ -171,25 +177,18 @@ const Profile = () => {
                                     <div className="row align-items-center">
                                         <div className="col-auto">
                                             <div className="profile-photo">
-                                                <img 
-                                                    src={userDetails?.profilePicture ? `http://localhost:5000${userDetails.profilePicture}` : `data:image/svg+xml;base64,${btoa('<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="#6c757d"/><text x="50%" y="50%" font-family="Arial" font-size="14" fill="white" text-anchor="middle" dy=".3em">User</text></svg>')}`}
+                                                <ImageModal
+                                                    src={userDetails?.profilePicture ? `${IMAGE_URL}${userDetails.profilePicture}` : IMAGES.avatar}
                                                     alt="Profile"
+                                                    className="profile-pic-thumb"
                                                 />
                                             </div>
                                         </div>
                                         <div className="col">
                                             <div className="profile-details d-flex flex-wrap align-items-center">
                                                 <div className="profile-name me-4 mb-2">
-                                                    <h4 className="text-white mb-1 fw-bold">{userDetails?.firstName} {userDetails?.lastName}</h4>
-                                                    <p className="text-white-50 mb-0 small">{userDetails?.role?.replace('_', ' ').toUpperCase()}</p>
-                                                </div>
-                                                <div className="profile-email me-4 mb-2">
-                                                    <h5 className="text-white mb-1">{userDetails?.email}</h5>
-                                                    <p className="text-white-50 mb-0 small">Email</p>
-                                                </div>
-                                                <div className="profile-phone mb-2">
-                                                    <h5 className="text-white mb-1">{userDetails?.phone}</h5>
-                                                    <p className="text-white-50 mb-0 small">Phone</p>
+                                                    <h4 className="text-white mb-1 fw-bold">{userDetails.firstName} {userDetails.lastName}</h4>
+                                                    <p className="text-black-50 mb-0 small text-capitalize">{userDetails?.role?.replace('_', ' ')}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -276,21 +275,57 @@ const Profile = () => {
                                                     <div className="profile-password">
                                                         <form onSubmit={handlePasswordChange}>
                                                             <div className="row">
-                                                                <div className="col-12"><div className="form-group mb-3">
-                                                                    <label className="form-label">Current Password <span className="text-danger">*</span></label>
-                                                                    <input type="password" name="currentPassword" className="form-control" value={passwordForm.currentPassword} onChange={handlePasswordInputChange} required />
-                                                                </div></div>
-                                                                <div className="col-lg-6 col-md-6"><div className="form-group mb-3">
-                                                                    <label className="form-label">New Password <span className="text-danger">*</span></label>
-                                                                    <input type="password" name="newPassword" className="form-control" value={passwordForm.newPassword} onChange={handlePasswordInputChange} required minLength="6"/>
-                                                                </div></div>
-                                                                <div className="col-lg-6 col-md-6"><div className="form-group mb-3">
-                                                                    <label className="form-label">Confirm New Password <span className="text-danger">*</span></label>
-                                                                    <input type="password" name="confirmPassword" className="form-control" value={passwordForm.confirmPassword} onChange={handlePasswordInputChange} required />
-                                                                    {passwordForm.newPassword && passwordForm.confirmPassword && passwordForm.newPassword !== passwordForm.confirmPassword && (
-                                                                        <small className="text-danger">Passwords do not match</small>
-                                                                    )}
-                                                                </div></div>
+                                                                <div className="col-12">
+                                                                    <div className="form-group mb-3 position-relative">
+                                                                        <label className="form-label">Current Password <span className="text-danger">*</span></label>
+                                                                        <input type={showPassword ? "text" : "password"} name="currentPassword" className="form-control" value={passwordForm.currentPassword} onChange={handlePasswordInputChange} required />
+                                                                        <span className="position-absolute end-0 translate-middle-y"
+                                                                            onClick={() => setShowPassword(!showPassword)}
+                                                                            style={{
+                                                                                cursor: "pointer",
+                                                                                paddingRight: "0.75rem",
+                                                                                transform: "translateY(-50%)",
+                                                                                paddingBottom: "2.5rem"
+                                                                            }}>
+                                                                            <i className={`fa ${showPassword ? "fa-eye-slash" : "fa-eye"}`}></i>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                                <div className="col-lg-6 col-md-6">
+                                                                    <div className="form-group mb-3 position-relative">
+                                                                        <label className="form-label">New Password <span className="text-danger">*</span></label>
+                                                                        <input type={showNewPassword ? "text" : "password"} name="newPassword" className="form-control" value={passwordForm.newPassword} onChange={handlePasswordInputChange} required minLength="6" />
+                                                                        <span className="position-absolute end-0 translate-middle-y"
+                                                                            onClick={() => setShowNewPassword(!showNewPassword)}
+                                                                            style={{
+                                                                                cursor: "pointer",
+                                                                                paddingRight: "0.75rem",
+                                                                                transform: "translateY(-50%)",
+                                                                                paddingBottom: "2.5rem"
+                                                                            }}>
+                                                                            <i className={`fa ${showNewPassword ? "fa-eye-slash" : "fa-eye"}`}></i>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                                <div className="col-lg-6 col-md-6">
+                                                                    <div className="form-group mb-3 position-relative">
+                                                                        <label className="form-label">Confirm New Password <span className="text-danger">*</span></label>
+                                                                        <input type={showConfirmPassword ? "text" : "password"} name="confirmPassword" className="form-control" value={passwordForm.confirmPassword} onChange={handlePasswordInputChange} required />
+                                                                        <span className="position-absolute end-0 translate-middle-y"
+                                                                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                                                            style={{
+                                                                                cursor: "pointer",
+                                                                                paddingRight: "0.75rem",
+                                                                                transform: "translateY(-50%)",
+                                                                                paddingBottom: "2.5rem"
+                                                                            }}>
+                                                                            <i className={`fa ${showConfirmPassword ? "fa-eye-slash" : "fa-eye"}`}></i>
+                                                                        </span>
+                                                                        {passwordForm.newPassword && passwordForm.confirmPassword && passwordForm.newPassword !== passwordForm.confirmPassword && (
+                                                                            <small className="text-danger">Passwords do not match</small>
+                                                                        )}
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                             <div className="col-12">
                                                                 <button type="submit" className="btn btn-primary btn-lg" disabled={updating || (passwordForm.newPassword && passwordForm.newPassword !== passwordForm.confirmPassword)}>

@@ -24,6 +24,8 @@ export const ROLE_ROUTES = {
         '/my-tasks',
         '/task-reviews',
         '/profile',
+        '/user-profile/:id',
+        '/user-profile',
         '/app-profile',
         '/student',
         '/student-detail',
@@ -50,6 +52,8 @@ export const ROLE_ROUTES = {
         '/my-tasks',
         '/task-reviews',
         '/task',
+        '/user-profile/:id',
+        '/user-profile',
         '/my-team',
         '/interns',
         '/profile',
@@ -65,10 +69,8 @@ export const ROLE_ROUTES = {
     ],
     [USER_ROLES.EMPLOYEE]: [
         '/dashboard',
-        '/analysis',
         '/dashboard-dark',
         '/all-tasks',
-        '/my-tasks',
         '/profile',
         '/app-profile',
         '/calendar',
@@ -117,6 +119,7 @@ export const API_PERMISSIONS = {
 // Utility functions
 export const hasRouteAccess = (userRole, route) => {
     if (!userRole || !route) return false;
+    console.log('hasRouteAccess called with role:', userRole, 'and route:', route);
     const allowedRoutes = ROLE_ROUTES[userRole] || [];
     return allowedRoutes.includes(route);
 };

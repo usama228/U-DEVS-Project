@@ -23,6 +23,7 @@ const ProtectedRoute = ({ children, requiredRoute }) => {
             routeToCheck = routeToCheck.substring(0, routeToCheck.lastIndexOf('/'));
         }
 
+        console.log('Checking access for role:', userRole, 'to route:', routeToCheck);
         const hasAccess = hasRouteAccess(userRole, routeToCheck);
         
         if (!hasAccess) {

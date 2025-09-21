@@ -1,71 +1,71 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom'; 
-import PageTitle from '../layouts/PageTitle';
+import { Link, useNavigate } from 'react-router-dom';
 import { TaskService } from '../../services/TaskService';
 import { UserService } from '../../services/UserService';
 import { toast } from 'react-toastify';
-import { getUserDetails } from '../../services/AuthService';
-import { USER_ROLES } from '../../utils/rolePermissions';
+import PageTitle from '../layouts/PageTitle';
 
 const CreateTask = () => {
     const navigate = useNavigate();
-    const [formData, setFormData] = useState({
-        title: '',
-        description: '',
-        dueDate: '',
-        assigneeId: ''
-    });
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const [assigneeId, setAssigneeId] = useState('');
+    const [priority, setPriority] = useState('medium');
+    const [dueDate, setDueDate] = useState('');
     const [interns, setInterns] = useState([]);
     const [loading, setLoading] = useState(false);
-    const currentUser = getUserDetails();
 
     useEffect(() => {
-        const fetchUsers = async () => {
+        const fetchInterns = async () => {
             try {
-                let response;
-                if (currentUser.role === USER_ROLES.TEAM_LEAD) {
-                    response = await UserService.getInternees(currentUser.id);
-                } else if (currentUser.role === USER_ROLES.ADMIN) {
-                    response = await UserService.getInternees();
+                const response = await UserService.getInternees();
+                if (response.data.success && Array.isArray(response.data.data.users)) {
+                    setInterns(response.data.data.users);
                 } else {
-                    toast.error("You are not authorized to create tasks.");
-                    return;
-                }
-                
-                if(response.data.success) {
-                    const internUsers = response.data.data.users || []; // Ensure it's an array
-                    setInterns(internUsers);
+                    toast.error(response.data.message || 'Failed to fetch interns.');
+                    setInterns([]); 
                 }
             } catch (error) {
-                console.error("Error fetching users:", error);
-                toast.error(error.response?.data?.message || "Failed to load users");
+                console.error("Error fetching interns:", error);
+                toast.error(error.response?.data?.message || 'An error occurred while fetching interns.');
+                setInterns([]);
             }
         };
-        fetchUsers();
-    }, [currentUser.id, currentUser.role]);
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData(prevState => ({
-            ...prevState,
-            [name]: value
-        }));
-    };
+        fetchInterns();
+    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        // --- Field Validation ---
+        if (!title.trim() || !description.trim() || !assigneeId || !dueDate) {
+            toast.error('Please fill out all required fields.');
+            return;
+        }
+
+        // --- Past Date Validation ---
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // Set to midnight to compare dates only
+        const selectedDate = new Date(dueDate);
+
+        if (selectedDate < today) {
+            toast.error('The due date cannot be in the past. Please select a valid date.');
+            return;
+        }
+
         setLoading(true);
+        const taskData = { title, description, assigneeId, priority, dueDate };
+
         try {
-            const response = await TaskService.createTask(formData);
+            const response = await TaskService.createTask(taskData);
             if (response.data.success) {
                 toast.success('Task created successfully!');
                 navigate('/all-tasks');
             } else {
-                toast.error(response.data.message || 'Failed to create task');
+                toast.error(response.data.message || 'Failed to create task.');
             }
         } catch (error) {
             console.error('Error creating task:', error);
-            toast.error(error.response?.data?.message || 'An error occurred while creating the task');
+            toast.error(error.response?.data?.message || 'An unexpected error occurred.');
         } finally {
             setLoading(false);
         }
@@ -73,64 +73,58 @@ const CreateTask = () => {
 
     return (
         <>
+            <PageTitle activeMenu="Create Task" motherMenu="Tasks" />
             <div className="container-fluid">
-                <PageTitle activeMenu="Create Task" motherMenu="Task Management" />
-            </div>
-            <div className="dashboard-wrapper">
-                <div className="container-fluid">
-                    <div className="row">
-                        <div className="col-xl-12">
-                            <div className="card">
-                                <div className="card-header">
-                                    <h4 className="card-title">Create New Task</h4>
+                <div className="card">
+                    <div className="card-header">
+                        <h4 className="card-title">Create a New Task</h4>
+                    </div>
+                    <div className="card-body">
+                        <form onSubmit={handleSubmit}>
+                            <div className="form-group mb-3">
+                                <label htmlFor="title">Title <span className="text-danger">*</span></label>
+                                <input type="text" className="form-control" id="title" value={title} onChange={(e) => setTitle(e.target.value)} required />
+                                <small className="form-text text-muted">Must be between 5 and 50 characters.</small>
+                            </div>
+                            <div className="form-group mb-3">
+                                <label htmlFor="description">Description <span className="text-danger">*</span></label>
+                                <textarea className="form-control" id="description" rows="4" value={description} onChange={(e) => setDescription(e.target.value)} required></textarea>
+                                <small className="form-text text-muted">Must be at least 10 characters long.</small>
+                            </div>
+                            <div className="row">
+                                <div className="col-md-6 form-group mb-3">
+                                    <label htmlFor="assigneeId">Assign To <span className="text-danger">*</span></label>
+                                    <select className="form-control" id="assigneeId" value={assigneeId} onChange={(e) => setAssigneeId(e.target.value)} required>
+                                        <option value="">Select an Intern</option>
+                                        {interns.map(intern => (
+                                            <option key={intern.id} value={intern.id}>{intern.firstName} {intern.lastName}</option>
+                                        ))}
+                                    </select>
+                                    <small className="form-text text-muted">An intern must be assigned.</small>
                                 </div>
-                                <div className="card-body">
-                                    <form onSubmit={handleSubmit}>
-                                        <div className="row">
-                                            <div className="col-md-6">
-                                                <div className="mb-3">
-                                                    <label htmlFor="title" className="form-label">Title <span className="text-danger">*</span></label>
-                                                    <input type="text" className="form-control" id="title" name="title" value={formData.title} onChange={handleChange} required minLength="3" maxLength="100" />
-                                                    <small className="form-text text-muted">Required, 3-100 characters</small>
-                                                </div>
-                                            </div>
-                                            <div className="col-md-6">
-                                                <div className="mb-3">
-                                                    <label htmlFor="dueDate" className="form-label">Due Date <span className="text-danger">*</span></label>
-                                                    <input type="date" className="form-control" id="dueDate" name="dueDate" value={formData.dueDate} onChange={handleChange} required />
-                                                    <small className="form-text text-muted">Required</small>
-                                                </div>
-                                            </div>
-                                            <div className="col-md-12">
-                                                <div className="mb-3">
-                                                    <label htmlFor="description" className="form-label">Description <span className="text-danger">*</span></label>
-                                                    <textarea className="form-control" id="description" name="description" rows="3" value={formData.description} onChange={handleChange} required minLength="10" maxLength="1000"></textarea>
-                                                    <small className="form-text text-muted">Required, 10-1000 characters</small>
-                                                </div>
-                                            </div>
-                                            <div className="col-md-6">
-                                                <div className="mb-3">
-                                                    <label htmlFor="assigneeId" className="form-label">Assign To <span className="text-danger">*</span></label>
-                                                    <select className="form-control" id="assigneeId" name="assigneeId" value={formData.assigneeId} onChange={handleChange} required>
-                                                        <option value="">Select Intern</option>
-                                                        {interns.map(user => (
-                                                            <option key={user.id} value={user.id}>{user.firstName} {user.lastName} ({user.email})</option>
-                                                        ))}
-                                                    </select>
-                                                    <small className="form-text text-muted">Required</small>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="d-flex justify-content-end">
-                                            <Link to="/all-tasks" className="btn btn-secondary me-2">Cancel</Link>
-                                            <button type="submit" className="btn btn-primary" disabled={loading}>
-                                                {loading ? 'Creating...' : 'Create Task'}
-                                            </button>
-                                        </div>
-                                    </form>
+                                <div className="col-md-6 form-group mb-3">
+                                    <label htmlFor="priority">Priority</label>
+                                    <select className="form-control" id="priority" value={priority} onChange={(e) => setPriority(e.target.value)}>
+                                        <option value="low">Low</option>
+                                        <option value="medium">Medium</option>
+                                        <option value="high">High</option>
+                                        <option value="urgent">Urgent</option>
+                                    </select>
+                                    <small className="form-text text-muted">Set the priority level for the task.</small>
                                 </div>
                             </div>
-                        </div>
+                            <div className="form-group mb-4">
+                                <label htmlFor="dueDate">Due Date <span className="text-danger">*</span></label>
+                                <input type="date" className="form-control" id="dueDate" value={dueDate} onChange={(e) => setDueDate(e.target.value)} required />
+                                <small className="form-text text-muted">A future date must be selected.</small>
+                            </div>
+                            <div className="d-flex justify-content-end">
+                                <Link to="/all-tasks" className="btn btn-secondary me-2">Cancel</Link>
+                                <button type="submit" className="btn btn-primary" disabled={loading}>
+                                    {loading ? 'Creating...' : 'Create Task'}
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>

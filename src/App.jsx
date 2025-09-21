@@ -16,6 +16,7 @@ import './assets/vendor/swiper/css/swiper-bundle.min.css';
 import "./assets/css/style.css";
 import './jsx/pages/pages.css';
 import 'react-toastify/dist/ReactToastify.css';
+import './assets/css/modal.css';
 
 
 const SignUp = lazy(() => import('./jsx/pages/Registration'));
@@ -37,6 +38,34 @@ function withRouter(Component) {
 
     return ComponentWithRouterProp;
 }
+
+// Layout component with a single ToastContainer
+const Layout = ({ children }) => (
+    <>
+        <Suspense fallback={
+            <div id="preloader">
+                <div className="sk-three-bounce">
+                    <div className="sk-child sk-bounce1"></div>
+                    <div className="sk-child sk-bounce2"></div>
+                    <div className="sk-child sk-bounce3"></div>
+                </div>
+            </div>
+        }>
+            {children}
+        </Suspense>
+        <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+        />
+    </>
+);
 
 function App(props) {
     const dispatch = useDispatch();
@@ -76,64 +105,11 @@ function App(props) {
         </Routes>
     );
 
-    if (props.isAuthenticated) {
-        return (
-            <>
-                <Suspense fallback={
-                    <div id="preloader">
-                        <div className="sk-three-bounce">
-                            <div className="sk-child sk-bounce1"></div>
-                            <div className="sk-child sk-bounce2"></div>
-                            <div className="sk-child sk-bounce3"></div>
-                        </div>
-                    </div>
-                }
-                >
-                    <Index />
-                </Suspense>
-                <ToastContainer
-                    position="top-right"
-                    autoClose={5000}
-                    hideProgressBar={false}
-                    newestOnTop={false}
-                    closeOnClick
-                    rtl={false}
-                    pauseOnFocusLoss
-                    draggable
-                    pauseOnHover
-                />
-            </>
-        );
-
-    } else {
-        return (
-            <div className="vh-100">
-                <Suspense fallback={
-                    <div id="preloader">
-                        <div className="sk-three-bounce">
-                            <div className="sk-child sk-bounce1"></div>
-                            <div className="sk-child sk-bounce2"></div>
-                            <div className="sk-child sk-bounce3"></div>
-                        </div>
-                    </div>
-                }
-                >
-                    {authRoutes}
-                </Suspense>
-                <ToastContainer
-                    position="top-right"
-                    autoClose={5000}
-                    hideProgressBar={false}
-                    newestOnTop={false}
-                    closeOnClick
-                    rtl={false}
-                    pauseOnFocusLoss
-                    draggable
-                    pauseOnHover
-                />
-            </div>
-        );
-    }
+    return (
+        <Layout>
+            {props.isAuthenticated ? <Index /> : authRoutes}
+        </Layout>
+    );
 };
 
 const mapStateToProps = (state) => {
