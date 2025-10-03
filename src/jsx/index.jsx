@@ -88,9 +88,6 @@ import MainSweetAlert from "./components/PluginsMenu/SweetAlert/SweetAlert";
 import Toastr from "./components/PluginsMenu/Toastr/Toastr";
 import Lightgallery from "./components/PluginsMenu/Lightgallery/Lightgallery";
 
-/// Widget
-import Widget from "./pages/Widget";
-
 /// Table
 import SortingTable from "./components/table/SortingTable/SortingTable";
 import FilteringTable from "./components/table/FilteringTable/FilteringTable";
@@ -164,8 +161,6 @@ const Markup = () => {
     { url: "form-wizard", component: <Wizard />, protected: true },
     { url: "form-ckeditor", component: <CkEditor />, protected: true },
     { url: "form-validation", component: <FormValidation />, protected: true },
-    //widget
-    { url: "widget", component: <Widget />, protected: true },
     /// table
     { url: 'table-filtering', component: <FilteringTable />, protected: true },
     { url: 'table-sorting', component: <SortingTable />, protected: true },
