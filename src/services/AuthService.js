@@ -1,3 +1,4 @@
+
 import axiosInstance from './AxiosInstance';
 import Swal from "sweetalert2";
 import {
@@ -106,16 +107,12 @@ export function updateProfile(userData) {
     const formData = new FormData();
     const processedUserData = { ...userData };
 
-    // Handle phone number format: remove leading zero
     if (processedUserData.phone && typeof processedUserData.phone === 'string' && processedUserData.phone.startsWith('0')) {
         processedUserData.phone = processedUserData.phone.substring(1);
     }
 
-    // Append only non-null, non-undefined, and non-empty string values
     Object.keys(processedUserData).forEach(key => {
         const value = processedUserData[key];
-
-        // This condition ensures that no empty fields are sent to the backend
         if (value !== null && value !== undefined && value !== '') {
             formData.append(key, value);
         }
@@ -135,7 +132,7 @@ export function changePassword(currentPassword, newPassword) {
     });
 }
 
-export function adminChangePassword(userId, newPassword) { // Added this function
+export function adminChangePassword(userId, newPassword) {
     return axiosInstance.put('/auth/admin/change-password', {
         userId,
         newPassword
@@ -151,7 +148,7 @@ export function getUserDetails() {
     if (tokenDetailsString) {
         try {
             const tokenDetails = JSON.parse(tokenDetailsString);
-            return tokenDetails.user; // Return the user object
+            return tokenDetails.user;
         } catch (error) {
             return null;
         }
@@ -161,7 +158,6 @@ export function getUserDetails() {
 
 export function isLogin() {
     const tokenDetailsString = localStorage.getItem('userDetails');
-
     if (tokenDetailsString) {
         try {
             JSON.parse(tokenDetailsString);

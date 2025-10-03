@@ -10,6 +10,7 @@ import avatar from '../../assets/images/avatar/avatar-placeholder.webp';
 import logo from '../../assets/images/logo.png';
 import logoWhite from '../../assets/images/logo-white.png';
 import bg1 from '../../assets/images/bg1.png';
+import defaultCover from '../../assets/images/profile/cover.jpg';
 
 // Image constants for the application
 export const IMAGES = {
@@ -21,6 +22,7 @@ export const IMAGES = {
     contact4: contact4,
     contact5: contact5,
     contact6: contact6,
+    defaultCover: defaultCover,
     
     // Default avatar
     avatar: avatar,

@@ -13,16 +13,25 @@ const Dashboard = () => {
     if (loading) {
         return (
             <div className="d-flex justify-content-center align-items-center" style={{ height: '400px' }}>
+                <div className="container-fluid">
+                <PageTitle activeMenu="Dashboard" motherMenu="Home" />
+            </div>
                 <div className="spinner-border" role="status">
                     <span className="visually-hidden">Loading...</span>
                 </div>
             </div>
         );
     }
-
+    
     if (error) {
-        return <div className="alert alert-danger">{error}</div>;
+        return  <>
+        <div className="container-fluid">
+                <PageTitle activeMenu="Dashboard" motherMenu="Home" />
+            </div>
+        <div className="alert alert-danger">{error}</div>;
+        </>
     }
+
 
     const renderDashboardContent = () => {
         if (!dashboardData) return null;
@@ -346,12 +355,13 @@ const Dashboard = () => {
     };
 
     return (
-        <div className="dashboard-wrapper">
-            <div className="container-fluid">
+        <>
+        <div className="container-fluid pt-0">
                 <PageTitle activeMenu="Dashboard" motherMenu="Home" />
-            </div>
+        </div>
+                <div className="dashboard-wrapper">
 
-            <div className="container-fluid" style={{ paddingTop: '20px' }}>
+            <div className="container-fluid" style={{ paddingTop: '5px' }}>
                 <div className="row">
                     <div className="col-12">
                         {/* Welcome Card */}
@@ -397,6 +407,7 @@ const Dashboard = () => {
                 </div>
             </div>
         </div>
+        </>
     );
 };
 

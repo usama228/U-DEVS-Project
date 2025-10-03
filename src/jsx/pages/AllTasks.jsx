@@ -14,6 +14,7 @@ const AllTasks = () => {
     const [priorityFilter, setPriorityFilter] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+    const [userRole, setUserRole] = useState(null);
 
     const debouncedSearch = useCallback(debounce((value) => {
         setSearch(value);
@@ -46,6 +47,7 @@ const AllTasks = () => {
     }, [currentPage, search, statusFilter, priorityFilter]);
 
     useEffect(() => {
+        setUserRole(localStorage.getItem("role"));
         fetchTasks();
     }, [fetchTasks]);
 
@@ -140,9 +142,16 @@ const AllTasks = () => {
                                                         <td><span className={`badge ${getStatusBadge(task.status)}`}>{task.status}</span></td>
                                                         <td>{task.priority}</td>
                                                         <td>
-                                                            <Link to={`/task/${task.id}`} className="btn btn-sm btn-info me-2">View</Link>
-                                                            <button onClick={() => handleDelete(task.id)} className="btn btn-sm btn-danger">Delete</button>
-                                                        </td>
+                                                    <Link to={`/task/${task.id}`} className="btn btn-sm btn-info me-2">View</Link>
+                                                    {userRole == "admin" && (
+                                                        <button 
+                                                        onClick={() => handleDelete(task.id)} 
+                                                        className="btn btn-sm btn-danger"
+                                                        >
+                                                        Delete
+                                                        </button>
+                                                    )}
+                                                    </td>
                                                     </tr>
                                                 ))
                                             )}

@@ -1,3 +1,4 @@
+
 import React, { useContext } from "react";
 import { Routes, Route, Outlet } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -6,15 +7,16 @@ import { useSelector } from "react-redux";
 import "./index.css";
 import "./chart.css";
 import "./step.css";
+import "./pages/layout-override.css";
+import "../assets/scss/layout.css";
 
 /// Layout
 import Nav from "./layouts/nav";
-import Nav2 from "./layouts/nav/index2";
+
 import Footer from "./layouts/Footer";
 import ScrollToTop from "./layouts/ScrollToTop";
-import WalletBar from './layouts/WalletBar';
+
 /// Dashboard
-import Home from "./components/Dashboard/Home";
 import Analysis from "./pages/Analysis";
 import DashboardDark from "./components/Dashboard/DashboardDark";
 import Dashboard from "./pages/Dashboard";
@@ -35,46 +37,12 @@ import CreateTask from "./pages/CreateTask";
 import ViewTask from "./pages/ViewTask";
 import MyTasks from "./pages/MyTasks";
 
+// Notifications
+import NotificationsPage from "./pages/Notifications";
 
-//student
-import Students from "./components/Student/Students";
-import StudentDetails from "./components/Student/StudentDetails";
-import AddNewStudent from "./components/Student/AddNewStudent";
-
-//Teacher
-import Teachers from './components/Teacher/Teachers';
-import TeachersDetail from './components/Teacher/TeachersDetail';
-import AddNewTeacher from './components/Teacher/AddNewTeacher';
-//Food
-import Food from './components/Food/Food';
-import FoodDetails from './components/Food/FoodDetails';
-
-
-/// File Manager
-import FileManager from './components/FileManager/FileManager';
-import User from './components/FileManager/User';
-import HomeCalendar from './components/FileManager/HomeCalendar';
-import Activity from './components/FileManager/Activity';
-import FileChat from './components/FileManager/FileChat';
-
-
-/// App
-import AppProfile from "./components/AppsMenu/AppProfile/AppProfile";
-import PostDetails from "./components/AppsMenu/AppProfile/PostDetails";
-import EditProfile from "./components/AppsMenu/AppProfile/EditProfile";
-import Compose from "./components/AppsMenu/Email/Compose/Compose";
-import Inbox from "./components/AppsMenu/Email/Inbox/Inbox";
-import Read from "./components/AppsMenu/Email/Read/Read";
-import Calendar from "./components/AppsMenu/Calendar/Calendar";
-
-/// Product List
-import ProductGrid from "./components/AppsMenu/Shop/ProductGrid/ProductGrid";
-import ProductList from "./components/AppsMenu/Shop/ProductList/ProductList";
-import ProductDetail from "./components/AppsMenu/Shop/ProductGrid/ProductDetail";
-import ProductOrder from "./components/AppsMenu/Shop/ProductOrder";
-import Checkout from "./components/AppsMenu/Shop/Checkout/Checkout";
-import Invoice from "./components/AppsMenu/Shop/Invoice/Invoice";
-import Customers from "./components/AppsMenu/Shop/Customers/Customers";
+// Attendance
+import Attendance from './pages/Attendance';
+import Leaves from './pages/Leaves';
 
 /// Charts
 import SparklineChart from "./components/charts/Sparkline";
@@ -107,9 +75,6 @@ import MainSweetAlert from "./components/PluginsMenu/SweetAlert/SweetAlert";
 import Toastr from "./components/PluginsMenu/Toastr/Toastr";
 import Lightgallery from "./components/PluginsMenu/Lightgallery/Lightgallery";
 
-/// Widget
-import Widget from "./pages/Widget";
-
 /// Table
 import SortingTable from "./components/table/SortingTable/SortingTable";
 import FilteringTable from "./components/table/FilteringTable/FilteringTable";
@@ -134,17 +99,6 @@ import { ThemeContext } from "../context/ThemeContext";
 const Markup = () => {
   const routhPath = [
     { url: "analysis", component: <Analysis />, protected: true },
-    { url: "student", component: <Students />, protected: true },
-    { url: "student-detail", component: <StudentDetails />, protected: true },
-    { url: "add-student", component: <AddNewStudent />, protected: true },
-    { url: "teacher", component: <Teachers />, protected: true },
-    { url: "teacher-detail", component: <TeachersDetail />, protected: true },
-    { url: "add-teacher", component: <AddNewTeacher />, protected: true },
-    { url: "food", component: <Food />, protected: true },
-    { url: "food-details", component: <FoodDetails />, protected: true },
-    { url: "user", component: <User />, protected: true },
-    { url: "activity", component: <Activity />, protected: true },
-    { url: "calendar", component: <HomeCalendar />, protected: true },
     // User Management
     { url: "users", component: <Users />, protected: true },
     { url: "team-leads", component: <TeamLeads />, protected: true },
@@ -158,19 +112,11 @@ const Markup = () => {
     { url: "create-task", component: <CreateTask />, protected: true },
     { url: "task/:id", component: <ViewTask />, protected: true },
     { url: "my-tasks", component: <MyTasks />, protected: true },
-    //App Profile
-    { url: "app-profile", component: <AppProfile />, protected: true },
-    { url: "post-details", component: <PostDetails />, protected: true },
-    { url: "edit-profile", component: <EditProfile />, protected: true },
-    { url: "app-calender", component: <Calendar />, protected: true },
-    //App -> shops
-    { url: "ecom-product-grid", component: <ProductGrid />, protected: true },
-    { url: "ecom-product-list", component: <ProductList />, protected: true },
-    { url: "ecom-product-detail", component: <ProductDetail />, protected: true },
-    { url: "ecom-product-order", component: <ProductOrder />, protected: true },
-    { url: "ecom-checkout", component: <Checkout />, protected: true },
-    { url: "ecom-invoice", component: <Invoice />, protected: true },
-    { url: "ecom-customers", component: <Customers />, protected: true },
+    // Notifications
+    { url: "notifications", component: <NotificationsPage />, protected: true },
+    // Attendance
+    { url: "attendance", component: <Attendance />, protected: true },
+    { url: "leaves", component: <Leaves />, protected: true },
     //Charts
     { url: "chart-apexchart", component: <ApexChart />, protected: true },
     { url: "chart-rechart", component: <RechartJs />, protected: true },
@@ -193,8 +139,6 @@ const Markup = () => {
     { url: "form-wizard", component: <Wizard />, protected: true },
     { url: "form-ckeditor", component: <CkEditor />, protected: true },
     { url: "form-validation", component: <FormValidation />, protected: true },
-    //widget
-    { url: "widget", component: <Widget />, protected: true },
     /// table
     { url: 'table-filtering', component: <FilteringTable />, protected: true },
     { url: 'table-sorting', component: <SortingTable />, protected: true },
@@ -255,33 +199,6 @@ const Markup = () => {
           })}
         </Route>
 
-        <Route element={<Layout5 />}>
-          <Route path='/file-manager' exact element={
-            <ProtectedRoute requiredRoute="/file-manager">
-              <FileManager />
-            </ProtectedRoute>
-          } />
-          <Route path='/chat' exact element={
-            <ProtectedRoute requiredRoute="/chat">
-              <FileChat />
-            </ProtectedRoute>
-          } />
-          <Route path='/email-compose' exact element={
-            <ProtectedRoute requiredRoute="/email-compose">
-              <Compose />
-            </ProtectedRoute>
-          } />
-          <Route path='/email-inbox' exact element={
-            <ProtectedRoute requiredRoute="/email-inbox">
-              <Inbox />
-            </ProtectedRoute>
-          } />
-          <Route path='/email-read' exact element={
-            <ProtectedRoute required_route="/email-read">
-              <Read />
-            </ProtectedRoute>
-          } />
-        </Route>
         <Route element={<Layout6 />}>
           {routhPath2.map((data, i) => {
             if (data.protected) {
@@ -315,14 +232,13 @@ function Layout1() {
   return (
     <div id="main-wrapper" className={` show  ${sidebariconHover ? "iconhover-toggle" : ""} ${sideMenu ? "menu-toggle" : ""}`}>
       <div className={`wallet-open`}>
-        <Nav2 />
-        <div className="content-body" style={{ minHeight: window.screen.height + 20 }}>
+        <Nav />
+        <div className="content-body">
           <div className="container-fluid">
             <Outlet />
           </div>
         </div>
         <Footer changeFooter="footer-outer" />
-        <WalletBar />
       </div>
     </div>
 
@@ -335,7 +251,7 @@ function Layout2() {
   return (
     <div id="main-wrapper" className={`show ${sidebariconHover ? "iconhover-toggle" : ""} ${sideMenu ? "menu-toggle" : ""}`}>
       <Nav />
-      <div className="content-body" style={{ minHeight: window.screen.height + 20 }}>
+      <div className="content-body">
         <div className="container-fluid">
           <Outlet />
         </div>
@@ -352,38 +268,10 @@ function Layout5() {
   const sideMenu = useSelector(state => state.sideMenu);
   const { sidebariconHover } = useContext(ThemeContext);
   return (
-    <div id="main-wrapper" className={`show ${sidebariconHover ? "iconhover-toggle" : ""} ${sideMenu ? "menu-toggle" : ""}`}
-         style={{ 
-           transform: 'none', 
-           zoom: 1, 
-           scale: 1, 
-           position: 'relative',
-           width: '100%',
-           maxWidth: 'none',
-           margin: '0 auto',
-           overflowX: 'hidden'
-         }}>
+    <div id="main-wrapper" className={`show ${sidebariconHover ? "iconhover-toggle" : ""} ${sideMenu ? "menu-toggle" : ""}`}>
       <Nav />
-      <div className="content-body message-body mh-auto"
-           style={{ 
-             transform: 'none', 
-             zoom: 1, 
-             scale: 1,
-             marginLeft: 0,
-             width: '100%',
-             paddingTop: '20px'
-           }}>
-        <div className="container-fluid mh-auto p-0"
-             style={{ 
-               transform: 'none', 
-               zoom: 1, 
-               scale: 1,
-               width: '100%',
-               maxWidth: 'none',
-               margin: 0,
-               paddingLeft: '20px',
-               paddingRight: '20px'
-             }}>
+      <div className="content-body message-body mh-auto">
+        <div className="container-fluid mh-auto p-0">
           <Outlet />
         </div>
       </div>

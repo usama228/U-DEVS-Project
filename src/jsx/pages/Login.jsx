@@ -9,7 +9,6 @@ import {
 
 import BgImage from "../../assets/images/bg1.png";
 import logo from "../../assets/images/logo-full.png";
-import logolight from "../../assets/images/logo-white.png";
 import pol from "../../assets/images/pol.jpg";
 
 function Login(props) {
@@ -64,33 +63,29 @@ function Login(props) {
 		setTimeout(() => setIsSubmitting(false), 3000);
 	}
 
-	const togglePasswordVisibility = () => {
-		setShowPassword(!showPassword);
-	};
-
 	const element = document.querySelector("body");
 	let dataTheme = element?.getAttribute("data-theme-version") || "light";
 
 	return (
-		<div className="container h-100">
-			<div className="row h-100 align-items-center justify-contain-center">
-				<div className="col-xl-12">
-					<div className="card">
-						<div className="card-body p-0">
-							<div className="row m-0">
+		<div className="container min-vh-100 d-flex align-items-center justify-content-center p-3">
+	<div className="row w-100">
+		<div className="col-xl-11 col-lg-13 col-md-10 m-auto">
+			<div className="card shadow-lg">
+				<div className="card-body p-0">
+					<div className="row m-0">
 								<div className="col-xl-6 col-md-6 sign text-center sign-bg" style={{ backgroundImage: 'url(' + pol + ')' }}>
 									<div>
 										<div className="text-center my-5">
 											<Link to={"#"}>
 												<img className="logo-abbr dark-logo" width="200" src={logo} alt="" />
-												<img className="logo-abbr light-logo text-center m-auto" width="200" src={logolight} alt="" />
+												<img className="logo-abbr light-logo text-center m-auto" width="200" src={logo} alt="" />
 											</Link>
 										</div>
 										{
 											dataTheme === "light" ?
-												<img src={BgImage} className="slideskew img-fix bitcoin-img" alt="Background" />
+												<img src={BgImage} className="slideskew img-fix bitcoin-img pb-5" alt="Background" />
 												:
-												<img src={BgImage} className=" slideskew img-fix bitcoin-img " alt="Background" />
+												<img src={BgImage} className=" slideskew img-fix bitcoin-img pb-5" alt="Background" />
 										}
 									</div>
 								</div>

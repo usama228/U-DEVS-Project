@@ -23,6 +23,7 @@ const UserProfile = () => {
         phone: '',
         idCardNumber: '',
         profilePicture: null,
+        coverPhoto: null,
         idCardFrontPic: null,
         idCardBackPic: null
     });
@@ -205,7 +206,14 @@ const UserProfile = () => {
                     <div className="col-lg-12">
                         <div className="profile card card-body px-3 pt-3 pb-0">
                             <div className="profile-head">
-                                <div className="photo-content"><div className="cover-photo rounded"></div></div>
+                                <div className="photo-content">
+                                    <div className="cover-photo rounded" style={{
+                                        backgroundImage: `url(${userDetails?.coverPhoto ? `${IMAGE_URL}${userDetails.coverPhoto}` : IMAGES.defaultCover})`,
+                                        backgroundSize: 'cover',
+                                        backgroundPosition: 'center',
+                                        height: '250px'
+                                    }}></div>
+                                </div>
                                 <div className="profile-info">
                                     <div className="row align-items-center">
                                         <div className="col-auto">
@@ -282,9 +290,10 @@ const UserProfile = () => {
                                                     <div className="col-md-6 mb-3"><label>Last Name</label><input type="text" name="lastName" className="form-control" value={profileForm.lastName} onChange={handleInputChange} /></div>
                                                     <div className="col-md-6 mb-3"><label>Phone</label><input type="text" name="phone" className="form-control" value={profileForm.phone} onChange={handleInputChange} /></div>
                                                     <div className="col-md-6 mb-3"><label>ID Card Number</label><input type="text" name="idCardNumber" className="form-control" value={profileForm.idCardNumber} onChange={handleInputChange} /></div>
-                                                    <div className="col-md-4 mb-3"><label>Profile Picture</label><input type="file" name="profilePicture" className="form-control" onChange={handleFileChange} /></div>
-                                                    <div className="col-md-4 mb-3"><label>ID Card Front</label><input type="file" name="idCardFrontPic" className="form-control" onChange={handleFileChange} /></div>
-                                                    <div className="col-md-4 mb-3"><label>ID Card Back</label><input type="file" name="idCardBackPic" className="form-control" onChange={handleFileChange} /></div>
+                                                    <div className="col-md-3 mb-3"><label>Profile Picture</label><input type="file" name="profilePicture" className="form-control" onChange={handleFileChange} accept="image/*" /></div>
+                                                    <div className="col-md-3 mb-3"><label>Cover Photo</label><input type="file" name="coverPhoto" className="form-control" onChange={handleFileChange} accept="image/*" /></div>
+                                                    <div className="col-md-3 mb-3"><label>ID Card Front</label><input type="file" name="idCardFrontPic" className="form-control" onChange={handleFileChange} accept="image/*" /></div>
+                                                    <div className="col-md-3 mb-3"><label>ID Card Back</label><input type="file" name="idCardBackPic" className="form-control" onChange={handleFileChange} accept="image/*" /></div>
                                                 </div>
                                                 <button type="submit" className="btn btn-primary" disabled={updating}>{updating ? 'Updating...' : 'Update Profile'}</button>
                                             </form>

@@ -5,7 +5,6 @@ import { useDispatch , useSelector} from "react-redux";
 import { navtoggle } from "../../../store/actions/AuthActions";
 import { ThemeContext } from "../../../context/ThemeContext";
 import logo from "../../../assets/images/menu-logo.png";
-import logoText from "../../../assets/images/menu-logo.png";
 
 const NavHader = () => {
  
@@ -21,7 +20,6 @@ const NavHader = () => {
     <div className="nav-header">
       <Link to="/dashboard" className="brand-logo"> 
           <img src={logo} className="logo-abbr" alt="" />
-          <img src={logoText} className="brand-title" alt="" />
       </Link>
 
       <div

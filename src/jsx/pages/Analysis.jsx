@@ -3,6 +3,7 @@ import useDashboard from '../../hooks/useDashboard';
 import UserDistributionChart from '../components/Dashboard/Elements/UserDistributionChart';
 import TaskStatusChart from '../components/Dashboard/Elements/TaskStatusChart';
 import { getUserDetails } from '../../services/AuthService';
+import PageTitle from '../layouts/PageTitle';
 
 const Analysis = () => {
     const { dashboardData, loading, error } = useDashboard();
@@ -19,34 +20,63 @@ const Analysis = () => {
     }
 
     if (error) {
-        return <div className="alert alert-danger">{error}</div>;
+        return (
+            <>
+                <div className="container-fluid">
+                    <PageTitle activeMenu="Dashboard" motherMenu="Home" />
+                </div>
+                <div className="alert alert-danger">{error}</div>
+            </>
+        );
     }
 
-    return (
-        <div className="row">
-            {user && user.role === 'admin' && (
-                <div className="col-xl-6">
+    // checks after fetch
+    const noUserData =
+        user?.role === 'admin' &&
+        dashboardData &&
+        (!dashboardData.totalUsers || dashboardData.totalUsers === 0);
+
+    const noTaskData =
+        !dashboardData ||
+        (!dashboardData.totalTasks || dashboardData.totalTasks === 0);
+
+    return ( 
+        <>
+            <PageTitle activeMenu="Dashboard" motherMenu="Analysis" />
+            <div className="row">
+                {user && user.role === 'admin' && (
+                    <div className="col-xl-6">
+                        <div className="card">
+                            <div className="card-header">
+                                <h4 className="card-title">User Distribution</h4>
+                            </div>
+                            <div className="card-body">
+                                {noUserData ? (
+                                    <p className="text-center text-muted">No user data found</p>
+                                ) : (
+                                    <UserDistributionChart data={dashboardData} />
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                <div className={user && user.role === 'admin' ? "col-xl-6" : "col-xl-12"}>
                     <div className="card">
                         <div className="card-header">
-                            <h4 className="card-title">User Distribution</h4>
+                            <h4 className="card-title">Task Status</h4>
                         </div>
                         <div className="card-body">
-                            {dashboardData && <UserDistributionChart data={dashboardData} />}
+                            {noTaskData ? (
+                                <p className="text-center text-muted">No task data available</p>
+                            ) : (
+                                <TaskStatusChart data={dashboardData} />
+                            )}
                         </div>
-                    </div>
-                </div>
-            )}
-            <div className={user && user.role === 'admin' ? "col-xl-6" : "col-xl-12"}>
-                <div className="card">
-                    <div className="card-header">
-                        <h4 className="card-title">Task Status</h4>
-                    </div>
-                    <div className="card-body">
-                        {dashboardData && <TaskStatusChart data={dashboardData} />}
                     </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 };
 

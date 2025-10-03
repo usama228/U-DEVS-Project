@@ -17,6 +17,7 @@ import "./assets/css/style.css";
 import './jsx/pages/pages.css';
 import 'react-toastify/dist/ReactToastify.css';
 import './assets/css/modal.css';
+import './assets/scss/layout.css';
 
 
 const SignUp = lazy(() => import('./jsx/pages/Registration'));
