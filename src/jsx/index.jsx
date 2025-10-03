@@ -41,21 +41,9 @@ import MyTasks from "./pages/MyTasks";
 // Notifications
 import NotificationsPage from "./pages/Notifications";
 
-/// File Manager
-import User from './components/FileManager/User';
-import HomeCalendar from './components/FileManager/HomeCalendar';
-import Activity from './components/FileManager/Activity';
-import FileChat from './components/FileManager/FileChat';
-
-
-/// App
-import AppProfile from "./components/AppsMenu/AppProfile/AppProfile";
-import PostDetails from "./components/AppsMenu/AppProfile/PostDetails";
-import EditProfile from "./components/AppsMenu/AppProfile/EditProfile";
-import Compose from "./components/AppsMenu/Email/Compose/Compose";
-import Inbox from "./components/AppsMenu/Email/Inbox/Inbox";
-import Read from "./components/AppsMenu/Email/Read/Read";
-import Calendar from "./components/AppsMenu/Calendar/Calendar";
+// Attendance
+import Attendance from './pages/Attendance';
+import Leaves from './pages/Leaves';
 
 /// Charts
 import SparklineChart from "./components/charts/Sparkline";
@@ -108,15 +96,10 @@ import Error404 from "./pages/Error404";
 import Error500 from "./pages/Error500";
 import Error503 from "./pages/Error503";
 import { ThemeContext } from "../context/ThemeContext";
-import Attendance from './pages/Attendance';
-import Leaves from './pages/Leaves';
 
 const Markup = () => {
   const routhPath = [
     { url: "analysis", component: <Analysis />, protected: true },
-    { url: "user", component: <User />, protected: true },
-    { url: "activity", component: <Activity />, protected: true },
-    { url: "calendar", component: <HomeCalendar />, protected: true },
     // User Management
     { url: "users", component: <Users />, protected: true },
     { url: "team-leads", component: <TeamLeads />, protected: true },
@@ -132,13 +115,9 @@ const Markup = () => {
     { url: "my-tasks", component: <MyTasks />, protected: true },
     // Notifications
     { url: "notifications", component: <NotificationsPage />, protected: true },
+    // Attendance
     { url: "attendance", component: <Attendance />, protected: true },
     { url: "leaves", component: <Leaves />, protected: true },
-    //App Profile
-    { url: "app-profile", component: <AppProfile />, protected: true },
-    { url: "post-details", component: <PostDetails />, protected: true },
-    { url: "edit-profile", component: <EditProfile />, protected: true },
-    { url: "app-calender", component: <Calendar />, protected: true },
     //Charts
     { url: "chart-apexchart", component: <ApexChart />, protected: true },
     { url: "chart-rechart", component: <RechartJs />, protected: true },
@@ -221,28 +200,6 @@ const Markup = () => {
           })}
         </Route>
 
-        <Route element={<Layout5 />}>
-          <Route path='/chat' exact element={
-            <ProtectedRoute requiredRoute="/chat">
-              <FileChat />
-            </ProtectedRoute>
-          } />
-          <Route path='/email-compose' exact element={
-            <ProtectedRoute requiredRoute="/email-compose">
-              <Compose />
-            </ProtectedRoute>
-          } />
-          <Route path='/email-inbox' exact element={
-            <ProtectedRoute requiredRoute="/email-inbox">
-              <Inbox />
-            </ProtectedRoute>
-          } />
-          <Route path='/email-read' exact element={
-            <ProtectedRoute required_route="/email-read">
-              <Read />
-            </ProtectedRoute>
-          } />
-        </Route>
         <Route element={<Layout6 />}>
           {routhPath2.map((data, i) => {
             if (data.protected) {

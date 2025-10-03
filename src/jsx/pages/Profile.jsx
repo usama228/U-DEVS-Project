@@ -48,6 +48,7 @@ const Profile = () => {
             if (response.data.success) {
                 const user = response.data.data.user;
                 setUserDetails(user);
+                localStorage.setItem("role", user.role);
                 const initialData = {
                     firstName: user.firstName || '',
                     lastName: user.lastName || '',
