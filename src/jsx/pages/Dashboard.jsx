@@ -355,12 +355,13 @@ const Dashboard = () => {
     };
 
     return (
-        <div className="dashboard-wrapper">
-            <div className="container-fluid">
+        <>
+        <div className="container-fluid pt-0">
                 <PageTitle activeMenu="Dashboard" motherMenu="Home" />
-            </div>
+        </div>
+                <div className="dashboard-wrapper">
 
-            <div className="container-fluid" style={{ paddingTop: '20px' }}>
+            <div className="container-fluid" style={{ paddingTop: '5px' }}>
                 <div className="row">
                     <div className="col-12">
                         {/* Welcome Card */}
@@ -406,6 +407,7 @@ const Dashboard = () => {
                 </div>
             </div>
         </div>
+        </>
     );
 };
 
