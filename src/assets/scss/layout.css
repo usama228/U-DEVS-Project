@@ -1,0 +1,97 @@
+/* Fixed header and sidebar */
+.header {
+    position: fixed !important;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 100;
+}
+
+.deznav {
+    position: fixed !important;
+    top: 5rem; /* Adjust based on header height */
+    bottom: 0;
+    z-index: 99;
+    overflow-y: auto;
+    transition: all 0.2s ease;
+}
+
+/* Adjust main content area */
+.main-content {
+    margin-top: 5rem; /* Same as header height */
+    margin-left: 17rem; /* Same as sidebar width */
+    min-height: calc(100vh - 5rem) !important; /* Full viewport height minus header */
+    transition: margin 0.2s ease;
+    background: #f6f6f6;
+}
+
+/* Adjust for collapsed sidebar */
+[data-sidebar-style="overlay"] .main-content {
+    margin-left: 0;
+}
+
+[data-sidebar-style="collapsed"] .deznav {
+    width: 5rem;
+}
+
+[data-sidebar-style="collapsed"] .main-content {
+    margin-left: 5rem;
+}
+
+/* Fix content height issues */
+#main-wrapper {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.content-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100vh - 5rem); /* Full viewport height minus header */
+}
+
+.container-fluid {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.row {
+    flex: 1;
+}
+
+.footer {
+    margin-top: auto;
+    width: 100%;
+    height: 3rem;
+    background: white;
+}
+
+/* Fix sidebar collapse behavior */
+.deznav .metismenu > li {
+    transition: all 0.2s ease;
+}
+
+.nav-header {
+    transition: all 0.2s ease;
+}
+
+/* Improve scrolling */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}

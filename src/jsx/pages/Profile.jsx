@@ -16,6 +16,7 @@ const Profile = () => {
         phone: '',
         idCardNumber: '',
         profilePicture: null,
+        coverPhoto: null,
         idCardFrontPic: null,
         idCardBackPic: null
     });
@@ -161,18 +162,23 @@ const Profile = () => {
     if (loading) {
         return <div className="d-flex justify-content-center align-items-center" style={{ height: '400px' }}><div className="spinner-border" role="status"><span className="visually-hidden">Loading...</span></div></div>;
     }
-    
+
     return (
         <div className="profile-wrapper">
-            <div className="container-fluid">
                 <PageTitle activeMenu="Profile" motherMenu="User Management" />
-            </div>
             <div className="container-fluid" style={{ paddingTop: '20px' }}>
                 <div className="row">
                     <div className="col-lg-12">
                         <div className="profile card card-body px-3 pt-3 pb-0">
                             <div className="profile-head">
-                                <div className="photo-content"><div className="cover-photo rounded"></div></div>
+                                <div className="photo-content">
+                                    <div className="cover-photo rounded" style={{
+                                        backgroundImage: `url(${userDetails?.coverPhoto ? `${IMAGE_URL}${userDetails.coverPhoto}` : IMAGES.defaultCover})`,
+                                        backgroundSize: 'cover',
+                                        backgroundPosition: 'center',
+                                        height: '250px'
+                                    }}></div>
+                                </div>
                                 <div className="profile-info">
                                     <div className="row align-items-center">
                                         <div className="col-auto">
@@ -187,7 +193,7 @@ const Profile = () => {
                                         <div className="col">
                                             <div className="profile-details d-flex flex-wrap align-items-center">
                                                 <div className="profile-name me-4 mb-2">
-                                                    <h4 className="text-white mb-1 fw-bold">{userDetails.firstName} {userDetails.lastName}</h4>
+                                                    <h4 className="text-white mb-1 fw-bold">{userDetails?.firstName} {userDetails?.lastName}</h4>
                                                     <p className="text-black-50 mb-0 small text-capitalize">{userDetails?.role?.replace('_', ' ')}</p>
                                                 </div>
                                             </div>
@@ -253,6 +259,10 @@ const Profile = () => {
                                                                 <div className="col-lg-6 col-md-6"><div className="form-group mb-3">
                                                                     <label className="form-label">Profile Picture</label>
                                                                     <input type="file" name="profilePicture" className="form-control" onChange={handleFileChange} accept="image/jpeg,image/jpg,image/png,image/gif"/>
+                                                                </div></div>
+                                                                <div className="col-lg-6 col-md-6"><div className="form-group mb-3">
+                                                                    <label className="form-label">Cover Photo</label>
+                                                                    <input type="file" name="coverPhoto" className="form-control" onChange={handleFileChange} accept="image/jpeg,image/jpg,image/png,image/gif"/>
                                                                 </div></div>
                                                                 <div className="col-lg-6 col-md-6"><div className="form-group mb-3">
                                                                     <label className="form-label">ID Card Front</label>

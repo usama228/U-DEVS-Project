@@ -3,6 +3,7 @@ import useDashboard from '../../hooks/useDashboard';
 import UserDistributionChart from '../components/Dashboard/Elements/UserDistributionChart';
 import TaskStatusChart from '../components/Dashboard/Elements/TaskStatusChart';
 import { getUserDetails } from '../../services/AuthService';
+import PageTitle from '../layouts/PageTitle';
 
 const Analysis = () => {
     const { dashboardData, loading, error } = useDashboard();
@@ -19,10 +20,17 @@ const Analysis = () => {
     }
 
     if (error) {
-        return <div className="alert alert-danger">{error}</div>;
+        return <>
+        <div className="container-fluid">
+            <PageTitle activeMenu="Dashboard" motherMenu="Home" />
+        </div>
+        <div className="alert alert-danger">{error}</div>;
+        </> 
     }
 
-    return (
+    return ( 
+        <>
+            <PageTitle activeMenu="Dashboard" motherMenu="Analysis" />
         <div className="row">
             {user && user.role === 'admin' && (
                 <div className="col-xl-6">
@@ -47,6 +55,7 @@ const Analysis = () => {
                 </div>
             </div>
         </div>
+            </>
     );
 };
 

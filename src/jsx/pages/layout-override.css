@@ -1,170 +1,51 @@
-/* Layout Override CSS to fix zoom and positioning issues */
-
-/* Global reset for any transform, zoom, or scale issues */
-html, body, #root, #main-wrapper, .content-body, .container-fluid {
-    transform: none !important;
-    -webkit-transform: none !important;
-    -moz-transform: none !important;
-    -ms-transform: none !important;
-    zoom: 1 !important;
-    -webkit-zoom: 1 !important;
-    -moz-zoom: 1 !important;
-    scale: 1 !important;
-    -webkit-scale: 1 !important;
-    -moz-scale: 1 !important;
-    position: relative !important;
+.header,
+.dlabnav {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
-/* Ensure viewport is properly sized */
-html {
-    width: 100% !important;
-    height: 100% !important;
-    overflow-x: hidden !important;
+.dlabnav {
+  z-index: 101;          /* Sidebar above header */
+  height: 100vh;         /* Full viewport height */
+  overflow-y: auto;      /* Allow scrolling inside if needed */
 }
 
-body {
-    width: 100% !important;
-    min-height: 100vh !important;
-    overflow-x: hidden !important;
-    margin: 0 !important;
-    padding: 0 !important;
+/* STEP 2: Sidebar internals */
+.deznav-scroll {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
-/* Main wrapper fixes */
-#main-wrapper {
-    width: 100% !important;
-    max-width: none !important;
-    margin: 0 auto !important;
-    position: relative !important;
-    overflow-x: hidden !important;
+.deznav-scroll .metismenu {
+  flex: 1;                          /* Take remaining space */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;      /* Normal menu stacking */
+  gap: 0.5rem;                      /* Even spacing between items */
 }
 
-/* Content body layout fixes */
+/* Collapsed sidebar (default in toggle mode) */
+#main-wrapper.iconhover-toggle.menu-toggle .dlabnav {
+  width: 5.3125rem;
+  transition: width 0.25s ease;
+  overflow: hidden;                 /* Hide text/icons overflow */
+}
+
+/* Expanded sidebar on hover */
+#main-wrapper.iconhover-toggle.menu-toggle .dlabnav:hover {
+  width: 16rem;
+  overflow: visible;                /* Allow submenus */
+}
+
+/* STEP 3: Content adjustments */
+#main-wrapper.menu-toggle .content-body {
+  margin-left: 5.3125rem;
+}
+
 .content-body {
-    width: 100% !important;
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-    padding-top: 20px !important;
-    position: relative !important;
-    overflow-x: auto !important;
-}
-
-/* Container fluid fixes */
-.container-fluid {
-    width: 100% !important;
-    max-width: none !important;
-    margin: 0 !important;
-    padding-left: 20px !important;
-    padding-right: 20px !important;
-    box-sizing: border-box !important;
-}
-
-/* Row and column fixes */
-.row {
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-    width: 100% !important;
-}
-
-[class*="col-"] {
-    padding-left: 15px !important;
-    padding-right: 15px !important;
-    box-sizing: border-box !important;
-}
-
-/* Header fixes */
-.header {
-    width: 100% !important;
-    padding-left: 0 !important;
-    margin-left: 0 !important;
-    position: relative !important;
-}
-
-.header .header-content {
-    width: 100% !important;
-    margin-left: 0 !important;
-    padding-left: 20px !important;
-    padding-right: 20px !important;
-}
-
-/* Page titles fixes */
-.page-titles {
-    width: 100% !important;
-    margin: 0 !important;
-    padding: 20px !important;
-    position: relative !important;
-}
-
-/* Override all data-attribute based styles that cause issues */
-[data-layout] .content-body,
-[data-sidebar-style] .content-body,
-[data-container] .content-body,
-[data-sidebar-position] .content-body,
-[data-header-position] .content-body {
-    padding-top: 20px !important;
-    margin-left: 0 !important;
-    width: 100% !important;
-}
-
-[data-layout] .container-fluid,
-[data-sidebar-style] .container-fluid,
-[data-container] .container-fluid {
-    width: 100% !important;
-    max-width: none !important;
-    margin: 0 !important;
-    padding-left: 20px !important;
-    padding-right: 20px !important;
-}
-
-/* Specific overrides for problematic layout combinations */
-[data-layout="horizontal"] .content-body {
-    padding-top: 20px !important;
-}
-
-[data-sidebar-style="full"] .content-body,
-[data-sidebar-style="compact"] .content-body,
-[data-sidebar-style="modern"] .content-body,
-[data-sidebar-style="mini"] .content-body {
-    margin-left: 0 !important;
-    padding-top: 20px !important;
-}
-
-[data-container="boxed"] .content-body,
-[data-container="wide-boxed"] .content-body,
-[data-container="wide"] .content-body {
-    padding-top: 20px !important;
-}
-
-/* Ensure cards and components are properly sized */
-.card {
-    width: 100% !important;
-    box-sizing: border-box !important;
-}
-
-/* Fix any transform or positioning issues with cards */
-.card, .card-body, .card-header {
-    transform: none !important;
-    zoom: 1 !important;
-    scale: 1 !important;
-}
-
-/* Media queries for responsive design */
-@media (max-width: 1200px) {
-    .container-fluid {
-        padding-left: 15px !important;
-        padding-right: 15px !important;
-    }
-}
-
-@media (max-width: 768px) {
-    .container-fluid {
-        padding-left: 10px !important;
-        padding-right: 10px !important;
-    }
-    
-    .page-titles {
-        padding: 15px !important;
-    }
+  margin-left: 16rem;
+  transition: margin-left 0.25s ease;
 }
