@@ -57,12 +57,18 @@ const SideBar = () => {
  }, []);
 
  useEffect(() => {
-   var btn = document.querySelector(".nav-control");
-   var aaa = document.querySelector("#main-wrapper");
-    function toggleFunc() {
-      return aaa.classList.toggle("menu-toggle");
+   const handleToggle = () => {
+     const wrapper = document.querySelector("#main-wrapper");
+     if (wrapper) {
+       wrapper.classList.toggle("menu-toggle");
+     }
+   };
+   
+   const btn = document.querySelector(".nav-control");
+   if (btn) {
+     btn.addEventListener("click", handleToggle);
+     return () => btn.removeEventListener("click", handleToggle);
    }
-    btn.addEventListener("click", toggleFunc); 
  }, []);
 
    let handleheartBlast = document.querySelector('.heart');
@@ -117,18 +123,18 @@ const SideBar = () => {
  
   return (
       <div
-        onMouseEnter={()=>ChangeIconSidebar(true)}
-        onMouseLeave={()=>ChangeIconSidebar(false)}
-        className={`dlabnav ${iconHover} ${
-          sidebarposition.value === "fixed" &&
-          sidebarLayout.value === "horizontal" &&
-          headerposition.value === "static"
-            ? hideOnScroll > 120
-              ? "fixed"
-              : ""
-            : ""
-        }`}
-      >
+  onMouseEnter={() => ChangeIconSidebar(true)}
+  onMouseLeave={() => ChangeIconSidebar(false)}
+  className={`dlabnav ${iconHover} ${
+    sidebarposition.value === "fixed" &&
+    sidebarLayout.value === "horizontal" &&
+    headerposition.value === "static"
+      ? hideOnScroll > 120
+        ? "fixed"
+        : ""
+      : ""
+  }`}
+>
          <div className="dlabnav-scroll">           
             <ul className="metismenu" id="menu">
               {(filteredMenu.length > 0 ? filteredMenu : MenuList).map((data, index)=>{
@@ -201,12 +207,7 @@ const SideBar = () => {
                 }
               })}          
           </ul>	
-        
-            <div className="copyright">
-              <p><strong>UDev</strong></p>
-              <p className="fs-12">Made with <span className="heart" onClick={heartBlast}></span> by UDev</p>
-            </div>
-          </div>
+        </div>
       </div>
     );
 };

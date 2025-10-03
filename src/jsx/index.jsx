@@ -12,10 +12,9 @@ import "../assets/scss/layout.css";
 
 /// Layout
 import Nav from "./layouts/nav";
-import Nav2 from "./layouts/nav/index2";
+
 import Footer from "./layouts/Footer";
 import ScrollToTop from "./layouts/ScrollToTop";
-import WalletBar from './layouts/WalletBar';
 
 /// Dashboard
 import Analysis from "./pages/Analysis";
@@ -233,14 +232,13 @@ function Layout1() {
   return (
     <div id="main-wrapper" className={` show  ${sidebariconHover ? "iconhover-toggle" : ""} ${sideMenu ? "menu-toggle" : ""}`}>
       <div className={`wallet-open`}>
-        <Nav2 />
+        <Nav />
         <div className="content-body">
           <div className="container-fluid">
             <Outlet />
           </div>
         </div>
         <Footer changeFooter="footer-outer" />
-        <WalletBar />
       </div>
     </div>
 
