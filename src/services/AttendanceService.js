@@ -20,4 +20,8 @@ export function updateBreakTime(userId, breakTime) {
 
 export function getAttendanceByDate(date) {
     return axiosInstance.get(`/attendance/date/${date}`);
+}
+
+export function getAllAttendance(params = {}) {
+    return axiosInstance.get('/attendance', { params });
 } 
