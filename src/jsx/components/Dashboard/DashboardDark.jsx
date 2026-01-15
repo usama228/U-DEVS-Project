@@ -6,16 +6,16 @@ import pMinDelay from "p-min-delay";
 
 //Import Components
 import { SVGICON } from './Content';
-import { TeacherDetails } from './Elements/TeacherDetails';
-import { UnpaidStudentTable } from './Elements/UnpaidStudentTable';
+// import { TeacherDetails } from './Elements/TeacherDetails';
+// import { UnpaidStudentTable } from './Elements/UnpaidStudentTable';
 
 
-const SchoolPerformance = loadable(() =>
- 	pMinDelay(import("./Elements/SchoolPerformance"), 500)
-);
-const SchoolOverView = loadable(() =>
- 	pMinDelay(import("./Elements/SchoolOverView"), 1000)
-);
+// const SchoolPerformance = loadable(() =>
+//  	pMinDelay(import("./Elements/SchoolPerformance"), 500)
+// );
+// const SchoolOverView = loadable(() =>
+//  	pMinDelay(import("./Elements/SchoolOverView"), 1000)
+// );
 
 
 const cardBlog = [
@@ -124,7 +124,7 @@ const DashboardDark = () => {
 							<h4 className="heading m-0">Teacher Deatails</h4>
 						</div>
 						<div className="card-body p-0">
-							<TeacherDetails />
+							{/* <TeacherDetails />  */}
 						</div>
 					</div>
 				</div>
